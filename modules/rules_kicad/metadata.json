@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/rules_kicad",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_kicad"
+  ],
+  "versions": [
+    "0.2.0"
+  ],
+  "yanked_versions": {}
+}

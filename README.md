@@ -10,16 +10,38 @@ GitHub repos and require auth (covered below).
 
 ## Modules
 
+Organized by family. All entries are private GitHub repos —
+fetching tarballs requires auth (see "Auth" below).
+
+### Polyglot translation + ML training
+
 <!-- BOTNOC:MODULES_TABLE -->
 | Module | Latest | Description |
 |---|---|---|
-| [`rules_lang`](https://github.com/fastverk/rules_lang) | 0.0.0 | Polyglot AST round-trip + translator engine (token-tree substitution → AST diff). Provides `Polyglot.Sql.Ast` (the generic 32-ctor SQL AST that `Pg.Ast` extends via the Pattern-A `Ext` slot). |
+| [`rules_lang`](https://github.com/fastverk/rules_lang) | 0.0.0 | Polyglot AST round-trip + translator engine. Provides `Polyglot.Sql.Ast` (the generic 32-ctor SQL AST that `Pg.Ast` extends via the Pattern-A `Ext` slot). |
 | [`rules_lora`](https://github.com/fastverk/rules_lora) | 0.0.1 | Bazel-native LoRA fine-tuning. Four declarative macros: `lora_dataset`, `lora_recipe`, `lora_train`, `expert_manifest`. RunPod / local-CPU backends; torchtune-rendered recipes. |
 | [`rules_meson`](https://github.com/fastverk/rules_meson) | 0.0.0 | Hermetic meson + ninja toolchain for Bazel. `meson_configure` runs `meson setup` as a build action; consumers get a deterministic `compile_commands.json`. |
-<!-- /BOTNOC:MODULES_TABLE -->
 
-(More modules from the embedded-systems family — rules_sel4, rules_chisel,
-rules_microkit, etc. — are pending a follow-up sweep into this registry.)
+### Embedded systems (seL4 / microkit / hardware)
+
+| Module | Latest | Description |
+|---|---|---|
+| [`rules_sel4`](https://github.com/fastverk/rules_sel4) | 0.0.1 | Bazel rules for building the seL4 microkernel from source for multiple architectures and platforms. |
+| [`rules_microkit`](https://github.com/fastverk/rules_microkit) | 0.0.1 | Bazel rules for seL4 microkit apps: `microkit_pd` / `microkit_system` / `microkit_image`. |
+| [`rules_microkit_tool`](https://github.com/fastverk/rules_microkit_tool) | 0.0.1 | Bazel rules building the seL4 microkit Rust binary as a registerable toolchain. |
+| [`rules_cc_cross`](https://github.com/fastverk/rules_cc_cross) | 0.1.0 | Hermetic ARM/RISC-V/x86 cross-compiler toolchains for embedded Bazel builds (seL4, microkit, bare-metal). |
+| [`rules_qemu`](https://github.com/fastverk/rules_qemu) | 0.1.0 | Hermetic `qemu-system-*` toolchains + `qemu_run` / `qemu_test` rules for booting embedded images under Bazel. |
+
+### Hardware design (HDL / EDA)
+
+| Module | Latest | Description |
+|---|---|---|
+| [`rules_chisel`](https://github.com/fastverk/rules_chisel) | 0.0.1 | Bazel rules for Chisel HDL: Mill-driven `chisel_module` → Verilog elaboration. |
+| [`rules_verilog`](https://github.com/fastverk/rules_verilog) | 0.0.1 | Bazel rules for Verilog/SystemVerilog: Verilator + Icarus simulation, Yosys synthesis, hermetic toolchains. |
+| [`rules_kicad`](https://github.com/fastverk/rules_kicad) | 0.2.0 | Bazel rules for KiCad EDA: schematic / pcb / netlist / gerbers / bom via `kicad-cli`. |
+| [`rules_riscv_core`](https://github.com/fastverk/rules_riscv_core) | 0.0.1 | Curated RISC-V soft-core presets (Rocket, Ibex, ...) as Bazel-native `riscv_core` targets. |
+| [`rules_board`](https://github.com/fastverk/rules_board) | 0.0.1 | Bazel glue rule binding a KiCad PCB + optional soft-CPU to a microkit platform target. |
+<!-- /BOTNOC:MODULES_TABLE -->
 
 ## Quick start
 

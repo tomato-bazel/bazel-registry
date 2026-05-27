@@ -1,0 +1,32 @@
+# Hermetic ARM/RISC-V/x86 cross-compiler toolchains for embedded Bazel builds (seL4, microkit, bare-metal).
+module(
+    name = "rules_cc_cross",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_cc", version = "0.2.17")
+
+# The `cc_cross.toolchain(...)` extension fetches a pinned upstream
+# vendor toolchain (e.g. the ARM GNU Toolchain) and exposes it as a
+# regular Bazel `cc_toolchain`, registered via `register_toolchains`.
+#
+# Example (downstream consumer):
+#
+#     cc_cross = use_extension("@rules_cc_cross//cc_cross:extensions.bzl", "cc_cross")
+#     cc_cross.toolchain(target = "aarch64-none-elf", version = "14.2.rel1")
+#     use_repo(cc_cross, "arm_gnu_aarch64_none_elf")
+#     register_toolchains("@arm_gnu_aarch64_none_elf//:all")
+cc_cross = use_extension("//cc_cross:extensions.bzl", "cc_cross")
+cc_cross.toolchain(
+    target = "aarch64-none-elf",
+    version = "14.2.rel1",
+)
+use_repo(cc_cross, "arm_gnu_aarch64_none_elf")
+
+register_toolchains("@arm_gnu_aarch64_none_elf//:all")
+
+# Dev-only.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

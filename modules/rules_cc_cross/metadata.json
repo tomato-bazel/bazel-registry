@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/rules_cc_cross",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_cc_cross"
+  ],
+  "versions": [
+    "0.1.0"
+  ],
+  "yanked_versions": {}
+}

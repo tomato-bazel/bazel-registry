@@ -1,0 +1,17 @@
+# Bazel rules building the seL4 microkit Rust binary as a registerable toolchain.
+module(
+    name = "rules_microkit_tool",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+# Needed by the generated @microkit_sdk//:... BUILD so it can declare
+# a cc_library wrapping libmicrokit.a. Referenced via its canonical
+# `@@rules_cc+` name in the BUILD template since the generated repo
+# doesn't inherit bazel_dep visibility from our module graph.
+bazel_dep(name = "rules_cc", version = "0.2.17")
+
+# Dev-only.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
