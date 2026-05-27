@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/rules_meson",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_meson"
+  ],
+  "versions": [
+    "0.0.0"
+  ],
+  "yanked_versions": {}
+}
