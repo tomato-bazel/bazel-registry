@@ -1,0 +1,67 @@
+# rules_aws_workflows — hermetic Rust binaries + Bazel rules for
+# AWS workflow tooling. CFN typed-rule codegen lives in
+# rules_cloudformation; this module is the runtime layer
+# (interactive deploys, multi-stack TUIs, future ECS/S3/IAM
+# workflows).
+#
+# v0.1 ships:
+#   - //cfn_console: Rust binary driving CFN change-set lifecycle
+#     interactively (create → describe → confirm → execute → tail).
+#     Prompts for Parameter values via meridian PromptPanel.
+#   - //aws/cloudformation:defs.bzl: `cloudformation_up_interactive`
+#     rule wrapping the binary as a `bazel run`-able launcher bound
+#     to a specific `cloudformation_stack` target.
+module(
+    name = "rules_aws_workflows",
+    version = "0.1.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_shell", version = "0.6.1")
+
+# Rust toolchain — needed for cfn_console and any future Rust-based
+# workflow tools in this repo.
+bazel_dep(name = "rules_rust", version = "0.70.0")
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.95.0"],
+)
+use_repo(rust, "rust_toolchains")
+
+register_toolchains("@rust_toolchains//:all")
+
+# Crate dependencies — aws-sdk-cloudformation + aws-config drive
+# the actual CFN API calls; tokio is the async runtime aws-sdk
+# requires; clap parses argv; serde_json reads the rendered
+# template; thiserror for typed errors.
+crate = use_extension(
+    "@rules_rust//crate_universe:extensions.bzl",
+    "crate",
+    isolate = True,
+)
+crate.from_cargo(
+    name = "crates",
+    cargo_lockfile = "//cfn_console:Cargo.lock",
+    lockfile = "//cfn_console:cargo-bazel-lock.json",
+    manifests = ["//cfn_console:Cargo.toml"],
+)
+use_repo(crate, "crates")
+
+# meridian — proto-driven UI framework. cfn_console builds a
+# PromptPanel for CFN Parameters + a confirmation panel for the
+# change-set diff and hands them to meridian_tui::render_prompt.
+# Lives in the premium registry; the .bazelrc already pins it.
+bazel_dep(name = "meridian", version = "0.2.0")
+
+# rules_cloudformation — for downstream consumers pairing
+# `cloudformation_stack` (over there) with
+# `cloudformation_up_interactive` (over here). Not a build-time dep
+# of the rule itself; the `bazel_dep` makes the integration
+# discoverable from this repo's MODULE graph.
+bazel_dep(name = "rules_cloudformation", version = "0.7.0")
+
+# Dev-only.
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

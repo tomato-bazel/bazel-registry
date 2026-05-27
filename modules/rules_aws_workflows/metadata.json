@@ -10,7 +10,8 @@
     "github:fastverk/rules_aws_workflows"
   ],
   "versions": [
-    "0.1.0"
+    "0.1.0",
+    "0.1.1"
   ],
   "yanked_versions": {}
 }
