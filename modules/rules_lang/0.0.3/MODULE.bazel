@@ -1,0 +1,194 @@
+"""rules_lang — polyglot AST round-trip via native toolchains + Lean.
+
+Premium / private. Published in fastverk/bazel-registry-premium;
+private GH remote at fastverk/rules_lang. See INTERNAL.md for the v0
+scope (atlas + opt-in semantic core).
+"""
+
+module(
+    name = "rules_lang",
+    version = "0.0.3",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "rules_python", version = "1.7.0")
+bazel_dep(name = "rules_shell", version = "0.6.1")
+bazel_dep(name = "rules_lean", version = "0.3.1")
+bazel_dep(name = "rules_rdf", version = "0.2.0")
+bazel_dep(name = "rules_jena", version = "0.2.1")
+
+# rules_rust backs the rust_binary for `c_ast_struct_diff`, which the
+# `c_ast_struct_diff_test` rule (see c/rules.bzl) invokes as a tool.
+# Consumers of rules_lang's C-AST gates pull this transitively.
+bazel_dep(name = "rules_rust", version = "0.70.0")
+
+# rules_postgres is dev-only — only `examples/postgres_smoke/BUILD.bazel`
+# references it (the meson-driven compile_commands smoke). Avoids a
+# bzlmod cycle with rules_postgres' new dependency on rules_lang for
+# the c_ast_struct_diff_test rule.
+bazel_dep(name = "rules_postgres", version = "0.2.0", dev_dependency = True)
+
+# rules_meson is a transitive dep through rules_postgres
+# (postgres/meson.bzl loads @rules_meson//meson:meson_configure.bzl).
+# Declared at the root so the registry chain resolves it for both
+# rules_lang and the transitive rules_postgres usage.
+bazel_dep(name = "rules_meson", version = "0.0.0")
+bazel_dep(name = "rules_uv", version = "0.7.3")
+
+# rules_rdf, rules_jena, rules_postgres are sourced from the public
+# fastverk registry; rules_meson lives in the premium registry. All
+# resolved via the registry chain in .bazelrc.
+
+# rules_uv is published to the fastverk bazel-registry; consume the
+# released 0.7.3. (rules_lean / rules_rdf / rules_jena / rules_postgres
+# are also published, but we override them locally to flow unreleased
+# changes through during private dev. rules_uv is stable enough that
+# the override isn't needed.)
+
+# uv binary — prebuilt release for fast first-build (drop the
+# `source = "prebuilt"` line to build from source via cargo).
+uv = use_extension("@rules_uv//uv:extensions.bzl", "uv")
+uv.toolchain(source = "prebuilt")
+use_repo(uv, "uv", "uv_source")
+register_toolchains("@rules_uv//uv:uv_toolchain_def")
+
+# Pip hub backed by uv.lock — exposes targets as @pip//<pkg>.
+# Driven by //:pyproject.toml + //:uv.lock; regenerate the lock via
+# `uv lock --no-config` (the --no-config avoids leaking the host's
+# corporate gitlab index into the resolution).
+pip = use_extension("@rules_uv//pip:extensions.bzl", "pip")
+pip.parse(
+    hub_name = "pip",
+    lock = "//:uv.lock",
+)
+use_repo(pip, "pip")
+
+# Pull Postgres source — dev-only, used by examples/postgres_smoke
+# (compile_commands.json produced by rules_postgres' pg_meson_configure).
+pg = use_extension(
+    "@rules_postgres//postgres:extensions.bzl",
+    "pg",
+    dev_dependency = True,
+)
+# lay_overlay = False: skip the hand-written pg_config.h overlay in
+# src/include/. With pg_meson_configure, meson's correctly-generated
+# pg_config.h (in the headers TreeArtifact) is the right one to use.
+pg.source(version = "17.6", lay_overlay = False)
+use_repo(pg, "postgres_src")
+
+# Hermetic C/C++ toolchain. Pulls a pinned LLVM release via http_archive
+# under the hood — the v0 alternative to maintaining our own cc_toolchain
+# definitions. clang from this toolchain is what `c_ast_dump_single`
+# invokes, so the AST we ingest is reproducible across machines.
+#
+# `dev_dependency = True` on both the bazel_dep and the extension call:
+# the `@toolchains_llvm//toolchain/extensions:llvm.bzl%llvm` extension
+# fails with "Only the root module can use the 'llvm' extension" when
+# rules_lang is consumed transitively (e.g. by rules_postgres → Aion).
+# Gating these as dev-deps means transitive consumers skip the LLVM
+# setup entirely; only `cd rules_lang && bazel ...` (root invocation)
+# materializes the LLVM toolchain, which is the only context where the
+# C-AST-dump tooling actually runs. Downstream consumers that only need
+# the Lean polyglot atlas / `lean/Polyglot/Sql/Ast.lean` don't need
+# clang at all.
+bazel_dep(name = "toolchains_llvm", version = "1.7.0", dev_dependency = True)
+llvm = use_extension(
+    "@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm",
+    dev_dependency = True,
+)
+llvm.toolchain(
+    llvm_version = "18.1.8",
+)
+use_repo(llvm, "llvm_toolchain")
+register_toolchains("@llvm_toolchain//:all", dev_dependency = True)
+
+# ─── Rust toolchain ───────────────────────────────────────────────
+#
+# Drives the `c_ast_struct_diff` rust_binary (see translated/pipeline/
+# BUILD.bazel) which the `c_ast_struct_diff_test` rule (c/rules.bzl)
+# invokes as a tool. Not gated dev-only because consumers (rules_postgres'
+# Gate 3) need this transitively.
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.95.0"],
+)
+use_repo(rust, "rust_toolchains")
+register_toolchains("@rust_toolchains//:all")
+
+# rules_rust_prost: drives proto → rust codegen for translated/pipeline's
+# c_diff_report.proto. Versioned in lockstep with rules_rust.
+bazel_dep(name = "rules_rust_prost", version = "0.70.0")
+
+# rules_proto: proto_library target for the pipeline's .proto file.
+bazel_dep(name = "rules_proto", version = "7.1.0")
+bazel_dep(name = "protobuf", version = "33.4")
+
+register_toolchains("@rules_rust_prost//:default_prost_toolchain")
+
+# crate_universe: deps of the c_ast_struct_diff binary plus the full
+# `pipeline` lib + binary set under translated/pipeline/ and the
+# `translator` crate at translated/translator/.
+# isolate=True so our @lang_crates doesn't collide with consumer-side
+# `crates` universes.
+crate = use_extension(
+    "@rules_rust//crate_universe:extension.bzl",
+    "crate",
+    isolate = True,
+)
+crate.spec(
+    package = "serde_json",
+    features = ["unbounded_depth"],
+    version = "1",
+)
+crate.spec(
+    default_features = False,
+    features = ["derive"],
+    package = "serde",
+    version = "1",
+)
+crate.spec(
+    package = "prost",
+    version = "0.13",
+)
+crate.spec(
+    package = "prost-types",
+    version = "0.13",
+)
+crate.spec(package = "toml", version = "0.8")
+crate.spec(package = "regex", version = "1")
+crate.spec(package = "ndarray", version = "0.16")
+crate.spec(
+    default_features = False,
+    package = "ndarray-npy",
+    version = "0.9",
+)
+crate.spec(package = "shell-words", version = "1")
+crate.spec(package = "globset", version = "0.4")
+crate.spec(package = "rayon", version = "1")
+# translator crate deps:
+crate.spec(
+    features = [
+        "full",
+        "extra-traits",
+        "visit",
+        "visit-mut",
+    ],
+    package = "syn",
+    version = "2",
+)
+crate.spec(package = "quote", version = "1")
+crate.spec(package = "proc-macro2", version = "1")
+crate.spec(package = "prettyplease", version = "0.2")
+crate.from_specs(name = "lang_crates")
+use_repo(crate, "lang_crates")
+
+# rules_lean is sourced from the public fastverk registry (see .bazelrc).
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.12",
+    is_default = True,
+)
