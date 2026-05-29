@@ -1,0 +1,311 @@
+"""rules_lang — polyglot AST round-trip via native toolchains + Lean.
+
+This is the root module of the consolidated `polyglot` monorepo. The repo
+publishes TWO bazel modules via registry strip_prefix:
+
+  * `rules_lang` (this file, repo root)   — the engine + published Bazel
+    rules (c/, polyglot/ macros, translated/, ml/, python/, tools/ts-*,
+    engine/ Lean) + the rfcs/corpus generator track.
+  * `polyglot_ast` (ast/MODULE.bazel)     — the dep-free Lean kernel, for
+    light consumers (rules_texlive, rules_agentic_ide).
+
+`klad/` is folded in as a nested module (klad/MODULE.bazel, unpublished),
+built standalone (`cd klad && bazel ...`) and `.bazelignore`d here so its
+heavy ML stack (candle/wgpu/duckdb/bun) never leaks into rules_lang
+consumers.
+
+Premium / private. Published in fastverk/bazel-registry-premium.
+"""
+
+module(
+    name = "rules_lang",
+    version = "0.0.7",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "rules_python", version = "1.7.0")
+bazel_dep(name = "rules_shell", version = "0.6.1")
+bazel_dep(name = "rules_lean", version = "0.3.7")
+
+# polyglot_ast — the light Lean kernel (Common / C / Python / Rust / Sql /
+# Yaml / Json atlases + the generic Syntax precedence engine). Lives in
+# this repo under ast/ and is consumed cross-module: the engine's lean
+# tests + the //engine:gen_* regen tests resolve @polyglot_ast against it.
+# For in-repo dev the local_path_override points at ./ast; when rules_lang
+# is consumed transitively the override is ignored and polyglot_ast
+# resolves from the premium registry (published from ast/ via strip_prefix).
+bazel_dep(name = "polyglot_ast", version = "0.0.6")
+local_path_override(
+    module_name = "polyglot_ast",
+    path = "ast",
+)
+
+# ─── TypeScript axis (Polyglot.Typescript) ────────────────────────
+#
+# tools/ts-parse (.ts → canonical AST JSON) + tools/ts-emit (lean_emit IR
+# JSON → .ts), surfaced via //polyglot:typescript.bzl. Non-dev so
+# consumers can load the macros and resolve the Node toolchain
+# transitively. Node 22 LTS + TypeScript 5.6.3 pinned for hermeticity.
+bazel_dep(name = "aspect_rules_ts", version = "3.8.9")
+bazel_dep(name = "aspect_rules_js", version = "2.3.8")
+bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
+bazel_dep(name = "rules_nodejs", version = "6.7.4")
+
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+node.toolchain(node_version = "22.13.1")
+
+rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext")
+rules_ts_ext.deps(ts_version = "5.6.3")
+use_repo(rules_ts_ext, "npm_typescript")
+
+# Uniquely-named npm hub (`rules_lang_npm`, not the default `npm`) so a
+# transitive consumer's own `@npm` doesn't collide.
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
+npm.npm_translate_lock(
+    name = "rules_lang_npm",
+    pnpm_lock = "//:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
+)
+use_repo(npm, "rules_lang_npm")
+
+pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
+use_repo(pnpm, rules_lang_pnpm = "pnpm")
+
+# Lake workspace hook: hermetic Lean toolchain for `lean_test` /
+# `lean_emit` / `lean_regen_test` actions. The impl Lean lives in
+# //engine; this anchors the toolchain.
+lake = use_extension("@rules_lean//lean:lake.bzl", "lake")
+lake.workspace(
+    name = "rules_lang_lake",
+    allow_source_build = True,
+    lake_manifest = "//engine:lake-manifest.json",
+    lakefile = "//engine:lakefile.lean",
+    lean_toolchain = "//engine:lean-toolchain",
+)
+use_repo(lake, "rules_lang_lake")
+register_toolchains("@rules_lang_lake//:lean_toolchain_def")
+
+# RDF/Jena back the c_ast_to_rdf rule (consumer-facing → non-dev).
+bazel_dep(name = "rules_rdf", version = "0.3.0")
+bazel_dep(name = "rules_jena", version = "0.3.0")
+
+# rules_spec: RFC-corpus mechanization for rfcs/ (internal → dev-only;
+# `bazel test //rfcs/...` runs the SHACL + consistency SPARQL gates).
+bazel_dep(name = "rules_spec", version = "0.1.0", dev_dependency = True)
+
+# rules_rust backs the rust_binary for `c_ast_struct_diff`, which the
+# `c_ast_struct_diff_test` rule (c/rules.bzl) invokes as a tool.
+# Consumers pull this transitively.
+bazel_dep(name = "rules_rust", version = "0.70.0")
+
+# rules_postgres is dev-only — only examples/postgres_smoke references it.
+bazel_dep(name = "rules_postgres", version = "0.2.0", dev_dependency = True)
+bazel_dep(name = "rules_meson", version = "0.0.0")
+bazel_dep(name = "rules_uv", version = "0.7.3")
+
+# uv binary — prebuilt release for fast first-build.
+uv = use_extension("@rules_uv//uv:extensions.bzl", "uv")
+uv.toolchain(source = "prebuilt")
+use_repo(uv, "uv", "uv_source")
+register_toolchains("@rules_uv//uv:uv_toolchain_def")
+
+# Pip hub backed by uv.lock — exposes targets as @pip//<pkg>.
+pip = use_extension("@rules_uv//pip:extensions.bzl", "pip")
+pip.parse(
+    hub_name = "pip",
+    lock = "//:uv.lock",
+)
+use_repo(pip, "pip")
+
+# Postgres source — dev-only, used by examples/postgres_smoke.
+pg = use_extension(
+    "@rules_postgres//postgres:extensions.bzl",
+    "pg",
+    dev_dependency = True,
+)
+pg.source(version = "17.6", lay_overlay = False)
+use_repo(pg, "postgres_src")
+
+# Hermetic C/C++ (LLVM) toolchain — dev-only (clang for c_ast_dump runs
+# only at root invocation; transitive consumers bring their own clang).
+bazel_dep(name = "toolchains_llvm", version = "1.7.0", dev_dependency = True)
+llvm = use_extension(
+    "@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm",
+    dev_dependency = True,
+)
+llvm.toolchain(
+    llvm_version = "18.1.8",
+)
+use_repo(llvm, "llvm_toolchain")
+register_toolchains("@llvm_toolchain//:all", dev_dependency = True)
+
+# ─── Rust toolchain ───────────────────────────────────────────────
+# Drives the c_ast_struct_diff rust_binary (c/rules.bzl tool). Non-dev:
+# consumers (rules_postgres Gate 3) need it transitively.
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.95.0"],
+)
+use_repo(rust, "rust_toolchains")
+register_toolchains("@rust_toolchains//:all")
+
+# rules_rust_prost: proto → rust codegen for translated/pipeline.
+bazel_dep(name = "rules_rust_prost", version = "0.70.0")
+bazel_dep(name = "rules_proto", version = "7.1.0")
+bazel_dep(name = "protobuf", version = "33.4")
+register_toolchains("@rules_rust_prost//:default_prost_toolchain")
+
+rrprd = use_extension("@rules_rust_prost//:extensions.bzl", "rust_ext")
+use_repo(rrprd, "rrprd__prost-0.13.1", "rrprd__prost-types-0.13.1")
+
+# crate_universe for the translated/ pipeline + translator crate.
+# isolate=True so @lang_crates doesn't collide with consumer universes.
+crate = use_extension(
+    "@rules_rust//crate_universe:extension.bzl",
+    "crate",
+    isolate = True,
+)
+crate.spec(
+    package = "serde_json",
+    features = ["unbounded_depth"],
+    version = "1",
+)
+crate.spec(
+    default_features = False,
+    features = ["derive"],
+    package = "serde",
+    version = "1",
+)
+crate.spec(package = "toml", version = "0.8")
+crate.spec(package = "regex", version = "1")
+crate.spec(package = "ndarray", version = "0.16")
+crate.spec(
+    default_features = False,
+    package = "ndarray-npy",
+    version = "0.9",
+)
+crate.spec(package = "shell-words", version = "1")
+crate.spec(package = "globset", version = "0.4")
+crate.spec(package = "rayon", version = "1")
+crate.spec(
+    features = [
+        "full",
+        "extra-traits",
+        "visit",
+        "visit-mut",
+    ],
+    package = "syn",
+    version = "2",
+)
+crate.spec(package = "quote", version = "1")
+crate.spec(package = "proc-macro2", version = "1")
+crate.spec(package = "prettyplease", version = "0.2")
+crate.from_specs(name = "lang_crates")
+use_repo(crate, "lang_crates")
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.12",
+    is_default = True,
+)
+
+# ─── External file inputs ─────────────────────────────────────────
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+# Pinned clang TableGen tables (LLVM 18.1.8): source of truth for the C
+# atlas kind taxonomy. //engine:gen_* emit from these (via
+# Polyglot.Codegen.SchemaEmit) and diff against ast/'s committed
+# Polyglot.C.Generated.* sources.
+http_file(
+    name = "clang_18_1_8_decl_nodes_td",
+    urls = ["https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-18.1.8/clang/include/clang/Basic/DeclNodes.td"],
+    sha256 = "ad9e4af7befe505f60d78007b069870ac8973d045430ce9854bc7372f79a46a1",
+    downloaded_file_path = "DeclNodes.td",
+)
+http_file(
+    name = "clang_18_1_8_stmt_nodes_td",
+    urls = ["https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-18.1.8/clang/include/clang/Basic/StmtNodes.td"],
+    sha256 = "e2f9ce3d09b26a4b05a7c43f14f86086b8b38bc9afaf5e7dd000a25b6fba47df",
+    downloaded_file_path = "StmtNodes.td",
+)
+http_file(
+    name = "clang_18_1_8_type_nodes_td",
+    urls = ["https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-18.1.8/clang/include/clang/Basic/TypeNodes.td"],
+    sha256 = "3fd4e95237e7ed2ed7d13714cc6f67338eeddfb125aceb18ab06ce2a410a99ed",
+    downloaded_file_path = "TypeNodes.td",
+)
+http_file(
+    name = "clang_18_1_8_attr_td",
+    urls = ["https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-18.1.8/clang/include/clang/Basic/Attr.td"],
+    sha256 = "a97d48ade56d04c5126535148883b2f2026dda945c6636f4277c16e0c08d9993",
+    downloaded_file_path = "Attr.td",
+)
+
+# ─── corpus: canonical multi-language sources (rfcs/corpus track) ──
+http_archive(
+    name = "corpus_json_parse_cjson",
+    urls = ["https://github.com/DaveGamble/cJSON/archive/refs/tags/v1.7.18.tar.gz"],
+    sha256 = "3aa806844a03442c00769b83e99970be70fbef03735ff898f4811dd03b9f5ee5",
+    strip_prefix = "cJSON-1.7.18",
+    build_file_content = """exports_files(["cJSON.c", "cJSON.h"], visibility = ["//visibility:public"])
+filegroup(name = "all_sources", srcs = ["cJSON.c", "cJSON.h"], visibility = ["//visibility:public"])
+""",
+)
+http_file(
+    name = "corpus_json_parse_cpython_decoder",
+    urls = ["https://raw.githubusercontent.com/python/cpython/v3.12.7/Lib/json/decoder.py"],
+    sha256 = "9f02654649816145bc76f8c210a5fe3ba1de142d4d97a1c93105732e747c285b",
+    downloaded_file_path = "decoder.py",
+)
+http_file(
+    name = "corpus_json_parse_serde_de",
+    urls = ["https://raw.githubusercontent.com/serde-rs/json/v1.0.128/src/de.rs"],
+    sha256 = "e2755b92b4e61d5fefa14ca93acaac5e7c21c0fbf7adc09e2a039d0bf8d94d5e",
+    downloaded_file_path = "de.rs",
+)
+http_file(
+    name = "corpus_json_parse_go_decode",
+    urls = ["https://raw.githubusercontent.com/golang/go/go1.23.2/src/encoding/json/decode.go"],
+    sha256 = "2c4d202bbce137c4d75bbbb25d111f9190dba68c84da2137f733e0d3fe893e7a",
+    downloaded_file_path = "decode.go",
+)
+http_file(
+    name = "corpus_json_parse_deno_jps",
+    urls = ["https://raw.githubusercontent.com/denoland/std/0.220.1/json/json_parse_stream.ts"],
+    sha256 = "2740652ea73726cd0f2edc89188b35d64a1ec15dc8cf7fd87db52a0170bc182c",
+    downloaded_file_path = "json_parse_stream.ts",
+)
+http_file(
+    name = "corpus_base64_encode_c_bcon",
+    urls = ["https://raw.githubusercontent.com/B-Con/crypto-algorithms/cfbde48414baacf51fc7c74f275190881f037d32/base64.c"],
+    sha256 = "2c6c1eb346ec85ec7e21e1eeba1ed1a349e53692408ab6cdf6644c37c4daabd6",
+    downloaded_file_path = "base64.c",
+)
+http_file(
+    name = "corpus_base64_encode_python_stdlib",
+    urls = ["https://raw.githubusercontent.com/python/cpython/v3.12.7/Lib/base64.py"],
+    sha256 = "8d1f608dbf030d11d6ec4df9e4c55b73fb68cdfbd9f53a7c91684a93b55564b5",
+    downloaded_file_path = "base64.py",
+)
+http_file(
+    name = "corpus_base64_encode_rust_marshallpierce",
+    urls = ["https://raw.githubusercontent.com/marshallpierce/rust-base64/v0.22.1/src/engine/general_purpose/mod.rs"],
+    sha256 = "901760a7f5721ec3bafad5fea6251f57de0f767ecb2e1e2fdfe64d661404ec34",
+    downloaded_file_path = "general_purpose_mod.rs",
+)
+http_file(
+    name = "corpus_base64_encode_go_stdlib",
+    urls = ["https://raw.githubusercontent.com/golang/go/go1.23.2/src/encoding/base64/base64.go"],
+    sha256 = "638dff42db1dbf40d89f77b8bd0514bba1c9ba8752b7dc554719d8ce0a4de2c0",
+    downloaded_file_path = "base64.go",
+)
+http_file(
+    name = "corpus_base64_encode_deno_b64",
+    urls = ["https://raw.githubusercontent.com/denoland/std/0.220.1/encoding/base64.ts"],
+    sha256 = "8ccae67a1227b875340a8582ff707f37b131df435b07080d3bb58e07f5f97807",
+    downloaded_file_path = "base64.ts",
+)
