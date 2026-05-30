@@ -1,0 +1,69 @@
+"""rules_spec — shared substrate for Lean-grounded specification projects.
+
+First content: the generic Jena/RDF corpus toolkit extracted from the
+Aion repo (kg.Loader / AionPaths / Writer / GateHarness + Gates, the
+kg.edit write-ops mutation primitive, and the kg.reasoner.llm adapter
+SPI). Consumed by Aion (the corpus gates, lint, reasoner, lean tooling)
+and by mycelium (the kg_research design-spike orchestrator) so there is
+one copy instead of duplicated trees.
+
+Future scope (per narrative/rules-spec-kg-retirement-sequencing.md in the
+Aion repo): the lean_emit pipelines, the graph-integrity gate macros, and
+the narrative-site builder land here too as the kg retirement completes.
+"""
+
+module(
+    name = "rules_spec",
+    version = "0.5.1",
+)
+
+bazel_dep(name = "rules_java", version = "8.6.1")
+bazel_dep(name = "rules_jvm_external", version = "6.5")
+
+# Jena (embedded SPARQL/RDF), slf4j backend, and directories (platform
+# cache paths for the LLM-response cache). Coordinates mirror Aion +
+# mycelium so the lifted sources build unchanged.
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    name = "maven",
+    artifacts = [
+        "org.apache.jena:apache-jena-libs:5.0.0",
+        "org.apache.jena:jena-shacl:5.0.0",
+        "org.slf4j:slf4j-simple:2.0.13",
+        "dev.dirs:directories:26",
+    ],
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+    fetch_sources = False,
+)
+use_repo(maven, "maven")
+
+# Lean toolchain — backs the generic spec-framework modules under lean/
+# (Aion.Spec.{Universe,Predicates,Kernel,Axioms}, Aion.Corpus.Schema,
+# Aion.Emit.{TtlEmit,MdEmit}), lifted from the Aion repo. These import
+# nothing external (pure Lean 4 core), so the lake workspace declares no
+# requires. Toolchain version matches Aion's (v4.30.0-rc2) so the modules
+# compile identically whether built here or as srcs in an Aion lean_test.
+# 0.3.6 ships the dep-free-lake-workspace relaxation this repo's empty
+# `require` list needs.
+bazel_dep(name = "rules_lean", version = "0.3.6")
+
+lake = use_extension("@rules_lean//lean:lake.bzl", "lake")
+lake.workspace(
+    name = "rules_spec_lake",
+    lakefile = "//lean/lake:lakefile.lean",
+    lake_manifest = "//lean/lake:lake-manifest.json",
+    lean_toolchain = "//lean/lake:lean-toolchain",
+)
+use_repo(lake, "rules_spec_lake")
+
+register_toolchains("@rules_spec_lake//:lean_toolchain_def")
+
+# rules_rdf (engine-agnostic RDF rules) + rules_jena (Jena toolchain impls).
+# rules_spec uses these to define its corpus gate library declaratively: an
+# rdf_dataset over the RFC vocabulary + a spec_corpus_gates macro wiring
+# rdf_validate_test (SHACL shapes) + sparql_query_test (consistency queries)
+# over the ontology files it hosts under rdf/.
+bazel_dep(name = "rules_rdf", version = "0.3.0")
+bazel_dep(name = "rules_jena", version = "0.3.0")
