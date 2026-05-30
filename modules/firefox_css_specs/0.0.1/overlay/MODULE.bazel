@@ -1,0 +1,23 @@
+"""firefox_css_specs — Gecko's CSS parser + style system source.
+
+The `layout/style/` subtree of the Firefox ESR source, carved out via
+strip_prefix on the same upstream tarball that `rules_firefox` and the
+sibling `firefox_*` modules consume.
+
+Includes Mozilla's CSS parser (Stylo / Servo-port), the property
+definitions, and the computed-style tables. The source of truth for
+"which CSS properties exist, with which value grammars" — useful for
+any consumer generating or validating stylesheets.
+
+Status: scaffold. No active consumer yet.
+
+Published in fastverk/bazel-registry-premium. PRIVATE / NDA.
+"""
+
+module(
+    name = "firefox_css_specs",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")

@@ -1,0 +1,10 @@
+{
+  "integrity": "sha256-GwNNIRc1b9okgHoVEFUTIxXGulitK99+xx7nB/rF4Cg=",
+  "overlay": {
+    "BUILD.bazel": "sha256-xhYHKTmtnFC1KKdQIanbnA2tECk020UeoyQhtTQyXBc=",
+    "MODULE.bazel": "sha256-Y0QpsUQq72Fsk0qRRobI/LNlj8YU3cu0zk+OylcnPzA=",
+    "webidl_runner.py": "sha256-AgShXRThHKrqNG8HDDQMtpkvoiwZvCJlEmdiw+8rTFk="
+  },
+  "strip_prefix": "firefox-140.11.0/dom/bindings/parser",
+  "url": "https://archive.mozilla.org/pub/firefox/releases/140.11.0esr/source/firefox-140.11.0esr.source.tar.xz"
+}

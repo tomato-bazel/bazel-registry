@@ -1,0 +1,21 @@
+# firefox_webidl — exposes Firefox's `dom/webidl/` tree as filegroups.
+#
+# When this module is consumed via the registry, its source is the
+# strip_prefix'd `firefox-<v>/dom/webidl/` subtree (NOT this repo). The
+# globs below match the real shape that subtree will have at fetch time.
+
+# All .webidl interface definitions in one filegroup. Direct consumer
+# of the WebIDL → Lean codegen reads this.
+filegroup(
+    name = "webidl_files",
+    srcs = glob(["*.webidl"], allow_empty = True),
+    visibility = ["//visibility:public"],
+)
+
+# The full carved subtree (.webidl + .conf + any moz.build metadata),
+# for consumers that want the original Mozilla layout intact.
+filegroup(
+    name = "all",
+    srcs = glob(["**/*"], allow_empty = True),
+    visibility = ["//visibility:public"],
+)

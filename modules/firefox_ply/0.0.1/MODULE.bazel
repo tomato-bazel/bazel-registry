@@ -1,0 +1,26 @@
+"""firefox_ply — PLY (Python Lex-Yacc) vendored in the Firefox source.
+
+The `third_party/python/ply/` subtree of the Firefox ESR source, carved
+out via strip_prefix. Mozilla vendors David Beazley's PLY library
+(BSD-3-Clause) because their WebIDL.py parser uses it.
+
+Exposed primarily as a Python dep of `firefox_webidl_parser` — its
+`webidl_runner` py_binary needs PLY at runtime to invoke WebIDL.py.
+Carved into its own module rather than embedded so:
+
+  * The dep boundary is explicit (firefox_webidl_parser declares
+    `bazel_dep(name = "firefox_ply", ...)` and `deps = [\"@firefox_ply//:ply\"]`).
+  * Other Mozilla-source consumers needing PLY can reuse it.
+  * If we ever swap to a pip-fetched PLY, only this module changes.
+
+Published in fastverk/bazel-registry-premium. PRIVATE / NDA.
+"""
+
+module(
+    name = "firefox_ply",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_python", version = "1.7.0")

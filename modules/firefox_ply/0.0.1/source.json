@@ -1,0 +1,9 @@
+{
+  "integrity": "sha256-GwNNIRc1b9okgHoVEFUTIxXGulitK99+xx7nB/rF4Cg=",
+  "overlay": {
+    "BUILD.bazel": "sha256-V9ItUddApAIc+S+eEwvEo7iAY903BxstxpdD9FU/cKo=",
+    "MODULE.bazel": "sha256-37HkRY98uXx8s2Jh4HEcoXeMloKsdD+PVz+VK1mnM0M="
+  },
+  "strip_prefix": "firefox-140.11.0/third_party/python/ply",
+  "url": "https://archive.mozilla.org/pub/firefox/releases/140.11.0esr/source/firefox-140.11.0esr.source.tar.xz"
+}

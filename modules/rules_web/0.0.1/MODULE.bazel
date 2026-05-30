@@ -1,0 +1,28 @@
+"""rules_web — toolchain types and rules for web-standards specs.
+
+Defines language-agnostic Bazel toolchain interfaces for the W3C/WHATWG
+web stack — WebIDL, HTML, CSS, JS — so consumers can depend on the
+*interface* without committing to a specific implementation. Any module
+satisfying the interface can plug in as the registered toolchain.
+
+Initial focus: `webidl_toolchain_type`. The canonical implementation
+is `firefox_webidl_parser` (Mozilla's MPL-2.0 Python parser), but the
+interface is open — Servo's parser, the WHATWG reference, or a Rust
+port could each plug in without consumer-side changes.
+
+Designed alongside (not coupled to) rules_firefox: consumers depending
+only on rules_web for the rules + a toolchain registration get the
+narrowest closure possible, and the toolchain implementation can be
+swapped without touching the consumer.
+
+PRIVATE / NDA. Published in fastverk/bazel-registry-premium.
+"""
+
+module(
+    name = "rules_web",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_python", version = "1.7.0")

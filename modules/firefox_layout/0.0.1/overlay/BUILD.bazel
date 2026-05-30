@@ -1,0 +1,7 @@
+# firefox_layout — exposes Firefox's `layout/generic/` tree as filegroups.
+
+filegroup(
+    name = "all",
+    srcs = glob(["**/*"], allow_empty = True),
+    visibility = ["//visibility:public"],
+)

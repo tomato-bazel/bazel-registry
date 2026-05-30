@@ -1,0 +1,7 @@
+{
+  "homepage": "https://github.com/fastverk/rules_firefox",
+  "maintainers": [{"email": "matt@fastverk.com", "name": "Matt Marshall"}],
+  "repository": ["github:fastverk/rules_firefox"],
+  "versions": ["0.0.1"],
+  "yanked_versions": {}
+}
