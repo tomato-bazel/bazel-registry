@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/rules_chrome",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_chrome"
+  ],
+  "versions": [
+    "0.1.0"
+  ],
+  "yanked_versions": {}
+}

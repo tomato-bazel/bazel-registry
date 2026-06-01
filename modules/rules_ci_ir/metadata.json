@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/rules_ci_ir",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_ci_ir"
+  ],
+  "versions": [
+    "0.0.1"
+  ],
+  "yanked_versions": {}
+}

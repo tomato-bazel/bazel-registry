@@ -1,0 +1,18 @@
+{
+  "homepage": "https://github.com/fastverk/rules_github",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_github"
+  ],
+  "versions": [
+    "0.1.0",
+    "0.1.1",
+    "0.1.2"
+  ],
+  "yanked_versions": {}
+}

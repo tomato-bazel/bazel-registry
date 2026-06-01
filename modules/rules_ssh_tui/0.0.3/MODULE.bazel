@@ -1,0 +1,92 @@
+# rules_ssh_tui — SSH-fronted TUI launcher.
+#
+# Provides:
+#   - server/        — russh-based ssh-tui-server binary. Listens on
+#                       a port, authenticates pubkeys against an
+#                       authorized_keys file, spawns a login_binary
+#                       under a PTY, pipes the SSH channel to it.
+#   - ssh_tui/       — `ssh_tui_image` macro composing the server +
+#                       caller's login_binary into one OCI image.
+#
+# Consumer-side: a caller declares
+#
+#   load("@rules_ssh_tui//ssh_tui:defs.bzl", "ssh_tui_image")
+#
+#   ssh_tui_image(
+#       name = "noc-tui",
+#       login_binary = "//cli:botnoc",
+#       authorized_keys = "//deploy:authorized_keys",
+#       listen_port = 22,
+#   )
+#
+# and gets an OCI image with `ssh-tui-server --login-binary /app/...`
+# as the entrypoint.
+module(
+    name = "rules_ssh_tui",
+    version = "0.0.3",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_rust", version = "0.70.0")
+bazel_dep(name = "rules_oci", version = "2.2.6")
+bazel_dep(name = "rules_pkg", version = "1.0.1")
+# rules_oci 2.2.6 pulls aspect_bazel_lib 2.7.2 by default, whose
+# generated `yq_toolchain.bzl` uses the now-removed kwarg
+# `incompatible_use_toolchain_transition`. Bazel 9.x refuses to load
+# it. Pin a newer aspect_bazel_lib (2.22.x+) that dropped the kwarg.
+bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.95.0"],
+)
+use_repo(rust, "rust_toolchains")
+register_toolchains("@rust_toolchains//:all")
+
+# Isolated so downstream consumers' crate universes don't collide
+# with our `ssh_tui_crates` repo.
+crate = use_extension(
+    "@rules_rust//crate_universe:extension.bzl",
+    "crate",
+    isolate = True,
+)
+crate.from_cargo(
+    name = "ssh_tui_crates",
+    cargo_lockfile = "//:Cargo.lock",
+    # No `lockfile = ...` json: when this module is consumed from
+    # another workspace, the manifest digest crate_universe computes
+    # differs from what we'd freeze here, and we get a "Digests do
+    # not match" failure. Resolving at build time is the safe option
+    # until rules_rust ships a workspace-relative digest fix.
+    manifests = [
+        "//:Cargo.toml",
+        "//server:Cargo.toml",
+    ],
+)
+use_repo(crate, "ssh_tui_crates")
+
+# Base image for the server itself (distroless/cc carries glibc).
+# Repo name is namespaced (`ssh_tui_distroless_cc`) so consumers
+# can declare their own `distroless_cc` without collision.
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "ssh_tui_distroless_cc",
+    digest = "sha256:6714977f9f02632c31377650c15d89a7efaebf43bab0f37c712c30fc01edb973",
+    image = "gcr.io/distroless/cc-debian12",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64/v8",
+    ],
+)
+use_repo(
+    oci,
+    "ssh_tui_distroless_cc",
+    "ssh_tui_distroless_cc_linux_amd64",
+    "ssh_tui_distroless_cc_linux_arm64_v8",
+)
+
+# Dev-only.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

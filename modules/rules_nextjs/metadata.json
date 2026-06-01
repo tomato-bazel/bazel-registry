@@ -1,0 +1,17 @@
+{
+  "homepage": "https://github.com/fastverk/rules_nextjs",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_nextjs"
+  ],
+  "versions": [
+    "0.1.0",
+    "0.1.1"
+  ],
+  "yanked_versions": {}
+}

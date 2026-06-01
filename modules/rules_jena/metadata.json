@@ -1,0 +1,22 @@
+{
+  "homepage": "https://github.com/fastverk/rules_jena",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_jena"
+  ],
+  "versions": [
+    "0.0.1",
+    "0.1.0",
+    "0.1.1",
+    "0.2.0",
+    "0.2.1",
+    "0.3.0",
+    "0.3.1"
+  ],
+  "yanked_versions": {}
+}

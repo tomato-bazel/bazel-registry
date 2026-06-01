@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/rules_schema_org",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_schema_org"
+  ],
+  "versions": [
+    "0.0.1"
+  ],
+  "yanked_versions": {}
+}

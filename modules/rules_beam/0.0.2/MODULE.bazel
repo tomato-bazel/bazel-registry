@@ -1,0 +1,17 @@
+# Apache Beam pipeline build + cross-runner deployment (DirectRunner, Dataflow, Flink, Spark)
+module(
+    name = "rules_beam",
+    version = "0.0.2",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# rules_java for the java_binary the beam_pipeline_binary macro
+# composes. Pinned to match the active rules_java line consumers use
+# (rules_jena / rules_lora / agora are all on 8.6.1).
+bazel_dep(name = "rules_java", version = "8.6.1")
+
+# Dev-only.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

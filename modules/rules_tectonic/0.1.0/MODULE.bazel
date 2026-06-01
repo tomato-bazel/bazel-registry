@@ -1,0 +1,23 @@
+"""rules_tectonic — Bazel rules to compile LaTeX into PDFs via tectonic.
+
+Auto-fetches a prebuilt tectonic release binary keyed to the host
+platform; downstream targets use a single `tectonic_pdf` rule to
+compile a top-level `.tex` (plus its srcs) into a PDF.
+"""
+
+module(
+    name = "rules_tectonic",
+    version = "0.1.0",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+bazel_dep(name = "rules_github", version = "0.1.1")
+
+# Wire the tectonic toolchain for the in-tree `examples/` smoke target.
+# Consumers must repeat this block in their own MODULE.bazel —
+# rules_* modules don't propagate `use_repo` to dependents.
+tectonic = use_extension("//tectonic:extensions.bzl", "tectonic", dev_dependency = True)
+use_repo(tectonic, "tectonic")
+register_toolchains("@tectonic//:tectonic_toolchain_def", dev_dependency = True)

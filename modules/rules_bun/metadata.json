@@ -1,0 +1,17 @@
+{
+  "homepage": "https://github.com/fastverk/rules_bun",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_bun"
+  ],
+  "versions": [
+    "0.1.0",
+    "0.2.0"
+  ],
+  "yanked_versions": {}
+}

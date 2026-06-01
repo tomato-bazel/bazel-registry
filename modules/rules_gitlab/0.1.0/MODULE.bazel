@@ -1,0 +1,53 @@
+# Bazel rules for GitLab CI configuration files.
+#
+# Today: validation against GitLab's official JSON Schema +
+# server-side lint via `glab ci lint`. Future surface: deploy
+# wrappers, registry/package API helpers, schema-derived typed
+# rules for authoring `.gitlab-ci.yml` from Starlark.
+module(
+    name = "rules_gitlab",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_python", version = "1.7.0")
+bazel_dep(name = "rules_shell", version = "0.6.1")
+
+# rules_uv ships the Python validator dep (check-jsonschema) via
+# its `pip.parse` extension. Consumers of rules_gitlab don't need
+# their own uv setup — the tooling hub here is internal.
+bazel_dep(name = "rules_uv", version = "0.7.1")
+
+# Pick a Python interpreter for the validator binary. 3.12 is the
+# fastverk default; the validator itself is interpreter-agnostic
+# (pure check-jsonschema + stdlib).
+python = use_extension(
+    "@rules_python//python/extensions:python.bzl",
+    "python",
+    dev_dependency = True,
+)
+python.toolchain(python_version = "3.12", is_default = True)
+
+uv = use_extension("@rules_uv//uv:extensions.bzl", "uv")
+use_repo(uv, "uv", "uv_source")
+register_toolchains("@rules_uv//uv:uv_toolchain_def")
+
+pip = use_extension("@rules_uv//pip:extensions.bzl", "pip")
+pip.parse(
+    hub_name = "rules_gitlab_tooling",
+    lock = "//tooling:uv.lock",
+)
+use_repo(pip, "rules_gitlab_tooling")
+
+# Pin the official GitLab CI JSON Schema (the same file GitLab's
+# web editor uses) for use by the `gitlab_ci_validate` rule.
+gitlab_schemas = use_extension("//gitlab:extensions.bzl", "gitlab_schemas")
+use_repo(gitlab_schemas, "gitlab_ci_schema")
+
+# Default `glab` toolchain — PATH-based sh wrapper. Consumers
+# wanting hermeticity can register their own (multitool,
+# http_file) without touching the user-facing rules.
+register_toolchains("//gitlab/glab:default_glab_toolchain")
+
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/rules_beam",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_beam"
+  ],
+  "versions": [
+    "0.0.2"
+  ],
+  "yanked_versions": {}
+}

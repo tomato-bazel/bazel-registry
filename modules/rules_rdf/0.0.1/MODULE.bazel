@@ -1,0 +1,12 @@
+# Bazel rules for RDF — toolchain types for SPARQL, SHACL validation, format conversion, and reasoning. Concrete implementations live in sibling repos like rules_jena.
+module(
+    name = "rules_rdf",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# Dev-only.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

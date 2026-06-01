@@ -1,0 +1,42 @@
+# Bazel-idiomatic BibTeX citations. Treats each paper / spec / web
+# resource as a content-addressable, source-typed Bazel target so the
+# LaTeX-paper build graph carries citation provenance the way
+# rules_jvm_external carries Maven artifacts.
+#
+# What rules_bibtex owns:
+#   * `bibtex_entry`, `arxiv_paper`, `doi_paper`, `manual_citation` —
+#     typed citation rules. Each emits PaperCitationInfo with the
+#     single-entry .bib file + provenance fields (arXiv id, DOI,
+#     snapshot URL) so a cite-lint aspect can verify coverage and a
+#     research-graph aspect can compute the transitive citation
+#     closure.
+#   * `cited_tex_paper(srcs, bib_deps, …)` — wraps rules_tectonic's
+#     `tex_paper` with a bib-assembly step that concatenates every
+#     `PaperCitationInfo`-emitting target's .bib snippet into the
+#     paper's bibliography. Build fails on undeclared `\cite{key}`.
+#   * `research_graph(name, roots)` — aspect-driven Turtle graph of
+#     (paper, cites, paper) edges. Each `bibtex_entry`'s `cites = [...]`
+#     attr declares the transitive papers it references; the aspect
+#     traverses the depset across paper targets so a project's whole
+#     research closure is one TTL file.
+#
+# V0 is "checked-in inline bibtex with arXiv / DOI metadata for
+# provenance"; V1 will add a `bazel run :update_pin` workflow that
+# fetches authoritative bibtex from arXiv / Crossref and verifies the
+# inline string matches.
+#
+# Companion to: rules_tectonic (LaTeX toolchain), rules_rdf (the
+# Turtle output format for research_graph).
+
+module(
+    name = "rules_bibtex",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_tectonic", version = "0.2.0")
+
+# Dev-only.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

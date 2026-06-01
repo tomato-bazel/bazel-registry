@@ -1,0 +1,23 @@
+# Apache Jena toolchain implementations for rules_rdf — SPARQL engine (ARQ), SHACL validator, Turtle/N-Triples serializers, OWL reasoner. Java tools built via rules_java + Maven.
+module(
+    name = "rules_jena",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# rules_jena provides Apache Jena-backed concrete implementations of
+# the toolchain types defined by rules_rdf. The abstract plugin
+# contract (stdin/argv/stdout shape, conformance test rule) lives
+# upstream; the Jena java_binary targets that satisfy it live here.
+bazel_dep(name = "rules_rdf", version = "0.0.1")
+
+# Java toolchain (java_binary, java_library, java_test). Matches the
+# `load("@rules_java//java:defs.bzl", ...)` invocation pattern used
+# by the source corpus at ~/Documents/rfcs/kg/java/BUILD.bazel.
+bazel_dep(name = "rules_java", version = "8.6.1")
+
+# Dev-only.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

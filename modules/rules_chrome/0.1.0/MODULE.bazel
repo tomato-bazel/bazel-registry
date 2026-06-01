@@ -1,0 +1,78 @@
+module(
+    name = "rules_chrome",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# Dev-only: only loaded by docs/BUILD.bazel and examples/...
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "rules_python", version = "2.0.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
+
+# Dev-only end-to-end smoke: pulls @chrome + @chromedriver for
+# `bazel test //examples/smoke:...`. Consumers don't see this — they
+# call `use_extension` themselves in their own MODULE.bazel.
+chrome = use_extension("//chrome:extensions.bzl", "chrome", dev_dependency = True)
+use_repo(chrome, "chrome", "chromedriver")
+
+register_toolchains(
+    "@chrome//:chrome_toolchain_def",
+    dev_dependency = True,
+)
+
+# Dev-only: hermetic python + playwright for the integration smoke
+# in `examples/smoke:playwright_smoke_test`. Consumers don't need
+# either — these are scoped to the smoke target only.
+python = use_extension(
+    "@rules_python//python/extensions:python.bzl",
+    "python",
+    dev_dependency = True,
+)
+python.toolchain(
+    is_default = True,
+    python_version = "3.12",
+)
+
+pip = use_extension(
+    "@rules_python//python/extensions:pip.bzl",
+    "pip",
+    dev_dependency = True,
+)
+pip.parse(
+    hub_name = "smoke_pip",
+    python_version = "3.12",
+    requirements_lock = "//examples/smoke:requirements_lock.txt",
+)
+use_repo(pip, "smoke_pip")
+
+# Dev-only: hermetic Node + Playwright (Node bindings) for the JS
+# integration smoke in `examples/smoke:playwright_node_smoke_test`.
+# aspect_rules_js pulls a pnpm-managed node_modules from
+# `examples/smoke/pnpm-lock.yaml`; rules_nodejs supplies the node
+# toolchain. Both are scoped to the smoke target.
+bazel_dep(name = "aspect_rules_js", version = "3.1.2", dev_dependency = True)
+bazel_dep(name = "rules_nodejs", version = "6.7.4", dev_dependency = True)
+
+node = use_extension(
+    "@rules_nodejs//nodejs:extensions.bzl",
+    "node",
+    dev_dependency = True,
+)
+node.toolchain(node_version = "22.11.0")
+
+npm = use_extension(
+    "@aspect_rules_js//npm:extensions.bzl",
+    "npm",
+    dev_dependency = True,
+)
+npm.npm_translate_lock(
+    name = "smoke_npm",
+    pnpm_lock = "//examples/smoke:pnpm-lock.yaml",
+    # Skip Playwright's post-install browser fetch — we use our own
+    # chrome via @chrome//:chrome. Without this, npm install grabs a
+    # ~300MB chromium per platform.
+    public_hoist_packages = {},
+)
+use_repo(npm, "smoke_npm")

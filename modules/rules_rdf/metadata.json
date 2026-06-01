@@ -1,0 +1,19 @@
+{
+  "homepage": "https://github.com/fastverk/rules_rdf",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_rdf"
+  ],
+  "versions": [
+    "0.0.1",
+    "0.1.0",
+    "0.2.0",
+    "0.3.0"
+  ],
+  "yanked_versions": {}
+}

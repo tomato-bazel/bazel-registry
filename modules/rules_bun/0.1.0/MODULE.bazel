@@ -1,0 +1,16 @@
+module(
+    name = "rules_bun",
+    version = "0.1.0",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+
+# `bun_run` macro emits a sh_binary that escapes the sandbox to run
+# Bun scripts against the live workspace. Consumers need rules_shell
+# loadable to expand the macro, so it's a regular (non-dev) bazel_dep.
+bazel_dep(name = "rules_shell", version = "0.4.1")
+
+# Dev-only: only loaded by docs/BUILD.bazel.
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

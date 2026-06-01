@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/rules_huggingface",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_huggingface"
+  ],
+  "versions": [
+    "0.0.3"
+  ],
+  "yanked_versions": {}
+}

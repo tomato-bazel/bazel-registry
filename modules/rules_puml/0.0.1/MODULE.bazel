@@ -1,0 +1,39 @@
+# PlantUML diagram rendering + composition. Java-backed (PlantUML is a
+# JVM tool); SVG / PNG output today, PDF planned via SVG→PDF conversion
+# (a follow-up uses Inkscape or svglib so consumers can drop diagrams
+# straight into LaTeX papers).
+#
+# V0 ships file-level macros: render one .puml, compose several fragments.
+# V1 is the typed-AST path the README sketches — generate one Starlark
+# rule per PlantUML construct (puml_class, puml_actor, puml_use_case, ...)
+# from a Lean-defined grammar in polyglot_ast, mirroring how
+# rules_cloudformation generates rules from a CFN spec. That waits on
+# the polyglot_ast PlantUML grammar landing.
+
+module(
+    name = "rules_puml",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_java", version = "8.6.1")
+bazel_dep(name = "rules_jvm_external", version = "6.6")
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    name = "rules_puml_maven",
+    artifacts = [
+        # PlantUML rendering tool. 1.2024.* is the current stable line
+        # (the project ships a release every couple of months;
+        # downstream consumers can override with `maven.override` if a
+        # specific version is required).
+        "net.sourceforge.plantuml:plantuml:1.2024.7",
+    ],
+    lock_file = "//:maven_install.json",
+)
+use_repo(maven, "rules_puml_maven")
+
+# Dev-only.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
