@@ -1,6 +1,5 @@
 {
   "integrity": "sha256-1lOSA/IZyeoCAeHld50nX05gkRLtcVt3PgzsSwP03Jw=",
   "strip_prefix": "rules_aws_workflows-0.1.1",
-  "url": "https://codeload.github.com/fastverk/rules_aws_workflows/tar.gz/refs/tags/v0.1.1",
-  "type": "tar.gz"
+  "url": "https://github.com/fastverk/rules_aws_workflows/archive/refs/tags/v0.1.1.tar.gz"
 }

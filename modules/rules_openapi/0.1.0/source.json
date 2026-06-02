@@ -1,6 +1,5 @@
 {
   "integrity": "sha256-YX6iTB7Q+x/CwSLQYvt+c4VCc777IhoLOsDZ1lE7bJA=",
   "strip_prefix": "rules_openapi-0.1.0",
-  "url": "https://codeload.github.com/fastverk/rules_openapi/tar.gz/refs/tags/v0.1.0",
-  "type": "tar.gz"
+  "url": "https://github.com/fastverk/rules_openapi/archive/refs/tags/v0.1.0.tar.gz"
 }

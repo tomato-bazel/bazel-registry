@@ -1,6 +1,5 @@
 {
   "integrity": "sha256-m8ZXNQ1b8KOsumFQqVLZQfjYCUVX38uuPTSE6Fed798=",
   "strip_prefix": "rules_lang-0.0.2",
-  "url": "https://codeload.github.com/fastverk/rules_lang/tar.gz/refs/tags/v0.0.2",
-  "type": "tar.gz"
+  "url": "https://github.com/fastverk/rules_lang/archive/refs/tags/v0.0.2.tar.gz"
 }

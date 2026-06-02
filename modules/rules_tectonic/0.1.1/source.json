@@ -1,6 +1,5 @@
 {
   "integrity": "sha256-d3eHtj3llOrSONVuKfDsdrzZzEh/2QtuT0VGf0YjpUg=",
   "strip_prefix": "rules_tectonic-0.1.1",
-  "url": "https://codeload.github.com/fastverk/rules_tectonic/tar.gz/refs/tags/v0.1.1",
-  "type": "tar.gz"
+  "url": "https://github.com/fastverk/rules_tectonic/archive/refs/tags/v0.1.1.tar.gz"
 }
