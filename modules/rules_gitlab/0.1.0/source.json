@@ -2,5 +2,5 @@
   "integrity": "sha256-vzk8Xt7qgoEIMJu7Vt9YevSgyPyI1VsePzqAbvgTaJE=",
   "strip_prefix": "rules_gitlab-0.1.0",
   "url": "https://codeload.github.com/fastverk/rules_gitlab/tar.gz/refs/tags/v0.1.0",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }

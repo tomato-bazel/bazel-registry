@@ -2,5 +2,5 @@
   "integrity": "sha256-f/Gb0WcqjxR/mhpwOZxXofY/hxZPYSJZUoXZJWV/2Oc=",
   "strip_prefix": "polyglot-0.0.12/ast",
   "url": "https://codeload.github.com/fastverk/polyglot/tar.gz/refs/tags/v0.0.12",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }

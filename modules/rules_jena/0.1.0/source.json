@@ -2,5 +2,5 @@
   "integrity": "sha256-F8PKL8V2zwCEGZj3yVNz8MutxfBdt0hrp1aW8F5PpXo=",
   "strip_prefix": "rules_jena-0.1.0",
   "url": "https://codeload.github.com/fastverk/rules_jena/tar.gz/refs/tags/v0.1.0",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }

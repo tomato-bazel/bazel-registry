@@ -2,5 +2,5 @@
   "integrity": "sha256-BhEBdJsV4qx210EXWUFgeRAVGqe9/U+X9aqr8BQeW0A=",
   "strip_prefix": "rules_jsonschema-0.1.0",
   "url": "https://codeload.github.com/fastverk/rules_jsonschema/tar.gz/refs/tags/v0.1.0",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }

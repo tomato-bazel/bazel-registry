@@ -2,5 +2,5 @@
   "integrity": "sha256-1bDk7YXAcPvNGyQ0Urn5Q4/s2D3AXmokyw4vizHRlAE=",
   "strip_prefix": "rules_docker_compose-0.1.0",
   "url": "https://codeload.github.com/fastverk/rules_docker_compose/tar.gz/refs/tags/v0.1.0",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }

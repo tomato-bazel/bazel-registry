@@ -2,5 +2,5 @@
   "integrity": "sha256-0GaXdP7UnNmhUggnWKXpFa5XtaffN44+2TDTKr7+NTc=",
   "strip_prefix": "wgsl_stdlib-0.4.0",
   "url": "https://codeload.github.com/fastverk/wgsl_stdlib/tar.gz/refs/tags/v0.4.0",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }

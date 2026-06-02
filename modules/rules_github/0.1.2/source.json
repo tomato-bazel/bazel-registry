@@ -2,5 +2,5 @@
   "integrity": "sha256-D4ETRrFeQ6p4xAHmHGxm0rWxUb65SgWndqiLs1mAoJY=",
   "strip_prefix": "rules_github-0.1.2",
   "url": "https://codeload.github.com/fastverk/rules_github/tar.gz/refs/tags/v0.1.2",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }

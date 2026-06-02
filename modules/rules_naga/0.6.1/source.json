@@ -2,5 +2,5 @@
   "integrity": "sha256-ikcgTF+YGcPOm7Cjgwggf+o5TLWQWBWJemSmSc5R+Qg=",
   "strip_prefix": "rules_naga-0.6.1",
   "url": "https://codeload.github.com/fastverk/rules_naga/tar.gz/refs/tags/v0.6.1",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }

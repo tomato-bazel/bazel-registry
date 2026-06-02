@@ -2,5 +2,5 @@
   "integrity": "sha256-x1Hzd5JrnQYmw5xODpBrUizqoW/PB9h5iy9+Rkebt/g=",
   "strip_prefix": "rules_cloudformation-0.2.0",
   "url": "https://codeload.github.com/fastverk/rules_cloudformation/tar.gz/refs/tags/v0.2.0",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }

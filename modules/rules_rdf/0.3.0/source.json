@@ -2,5 +2,5 @@
   "integrity": "sha256-5Fgb2PtEFsWkm8y31l7DvgXycIa2zhcqY8LP7YQY644=",
   "strip_prefix": "rules_rdf-0.3.0",
   "url": "https://codeload.github.com/fastverk/rules_rdf/tar.gz/refs/tags/v0.3.0",
-  "archive_type": "tar.gz"
+  "type": "tar.gz"
 }
