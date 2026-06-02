@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-Rx7au8Q540+31fhYdIVDujG/Q60ZuubglvbR3oblVrI=",
   "strip_prefix": "rules_lora-0.0.4",
-  "url": "https://codeload.github.com/fastverk/rules_lora/tar.gz/refs/tags/v0.0.4"
+  "url": "https://codeload.github.com/fastverk/rules_lora/tar.gz/refs/tags/v0.0.4",
+  "archive_type": "tar.gz"
 }

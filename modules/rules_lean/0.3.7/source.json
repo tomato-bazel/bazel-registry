@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-QkkKRq7bynhEUSYzY5rsZ4UF3MFJgJAaAulZYY5RVhs=",
   "strip_prefix": "rules_lean-0.3.7",
-  "url": "https://codeload.github.com/fastverk/rules_lean/tar.gz/refs/tags/v0.3.7"
+  "url": "https://codeload.github.com/fastverk/rules_lean/tar.gz/refs/tags/v0.3.7",
+  "archive_type": "tar.gz"
 }

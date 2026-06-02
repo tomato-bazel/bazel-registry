@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-PQU+kTMPVCBk6/lDO8HwNnlsY3Q5D11pxugfOB9AHmE=",
   "strip_prefix": "rules_nextjs-0.1.0",
-  "url": "https://codeload.github.com/fastverk/rules_nextjs/tar.gz/refs/tags/v0.1.0"
+  "url": "https://codeload.github.com/fastverk/rules_nextjs/tar.gz/refs/tags/v0.1.0",
+  "archive_type": "tar.gz"
 }

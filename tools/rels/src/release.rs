@@ -119,10 +119,22 @@ pub fn run(env: &Env, args: Args) -> Result<()> {
     fs::write(version_dir.join("MODULE.bazel"), module_bazel)
         .with_context(|| format!("write {}/MODULE.bazel", version_dir.display()))?;
 
+    // codeload.github.com URLs have no .tar.gz suffix in the path
+    // (it's encoded in the path segment) so Bazel can't infer the
+    // archive type. Set archive_type explicitly so the downloader
+    // picks the tar.gz reader. github.com URLs (which historical
+    // entries used) DO have the extension, so leave archive_type
+    // unset for them.
+    let archive_type = if url.contains("codeload.github.com") {
+        Some("tar.gz".to_string())
+    } else {
+        None
+    };
     let source = SourceJson {
         integrity: integrity.clone(),
         strip_prefix: strip_prefix.clone(),
         url: url.clone(),
+        archive_type,
     };
     source.write(&version_dir.join("source.json"))?;
 

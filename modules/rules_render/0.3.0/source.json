@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-EuKjGTl4kg6v3197VvGlAqJIY8eCYzM9WGyxxKhhkmE=",
   "strip_prefix": "rules_render-0.3.0",
-  "url": "https://codeload.github.com/fastverk/rules_render/tar.gz/refs/tags/v0.3.0"
+  "url": "https://codeload.github.com/fastverk/rules_render/tar.gz/refs/tags/v0.3.0",
+  "archive_type": "tar.gz"
 }

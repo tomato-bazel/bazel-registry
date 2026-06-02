@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-Pg8vlAbdLPd1w25fZ0EiNhVdvBgs8HXL5c+T/cchR0M=",
   "strip_prefix": "rules_sel4-0.0.1",
-  "url": "https://codeload.github.com/fastverk/rules_sel4/tar.gz/refs/tags/v0.0.1"
+  "url": "https://codeload.github.com/fastverk/rules_sel4/tar.gz/refs/tags/v0.0.1",
+  "archive_type": "tar.gz"
 }

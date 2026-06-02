@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-Fs/z36jVqm5pzCguWKfv5tSbRbDvSHvUwkq2fqwavDY=",
   "strip_prefix": "meridian-0.1.0",
-  "url": "https://codeload.github.com/mattmarshall/meridian/tar.gz/refs/tags/v0.1.0"
+  "url": "https://codeload.github.com/mattmarshall/meridian/tar.gz/refs/tags/v0.1.0",
+  "archive_type": "tar.gz"
 }

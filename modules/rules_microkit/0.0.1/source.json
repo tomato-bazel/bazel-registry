@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-reFmTmbXlq+kJeaBghP6Bwuw8jToqy58bWPCqVv+KEg=",
   "strip_prefix": "rules_microkit-0.0.1",
-  "url": "https://codeload.github.com/fastverk/rules_microkit/tar.gz/refs/tags/v0.0.1"
+  "url": "https://codeload.github.com/fastverk/rules_microkit/tar.gz/refs/tags/v0.0.1",
+  "archive_type": "tar.gz"
 }

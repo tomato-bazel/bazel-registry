@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-IE3km7EcoHfI95f3zbUEqVzjnlhxpPaxUYfj1mXtJ+w=",
   "strip_prefix": "rules_bibtex-0.0.2",
-  "url": "https://codeload.github.com/fastverk/rules_bibtex/tar.gz/refs/tags/v0.0.2"
+  "url": "https://codeload.github.com/fastverk/rules_bibtex/tar.gz/refs/tags/v0.0.2",
+  "archive_type": "tar.gz"
 }

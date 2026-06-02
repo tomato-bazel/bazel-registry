@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-duRlcN1c6qSLOGazr4tGLXgkT+89NLznhgH55HU9ZtY=",
   "strip_prefix": "rules_autoconf-0.1.0",
-  "url": "https://codeload.github.com/fastverk/rules_autoconf/tar.gz/refs/tags/v0.1.0"
+  "url": "https://codeload.github.com/fastverk/rules_autoconf/tar.gz/refs/tags/v0.1.0",
+  "archive_type": "tar.gz"
 }

@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-cvK8idLueySSfWuOzBG/E5FU6ul9nxT078w3ekfUWjA=",
   "strip_prefix": "rules_chrome-0.1.0",
-  "url": "https://codeload.github.com/fastverk/rules_chrome/tar.gz/refs/tags/v0.1.0"
+  "url": "https://codeload.github.com/fastverk/rules_chrome/tar.gz/refs/tags/v0.1.0",
+  "archive_type": "tar.gz"
 }

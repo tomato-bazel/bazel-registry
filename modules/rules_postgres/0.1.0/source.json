@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-MmyXMFoQ4y0q/jV06jk77A70QonVr3z0ZXEeuHq3s+0=",
   "strip_prefix": "rules_postgres-0.1.0",
-  "url": "https://codeload.github.com/fastverk/rules_postgres/tar.gz/refs/tags/v0.1.0"
+  "url": "https://codeload.github.com/fastverk/rules_postgres/tar.gz/refs/tags/v0.1.0",
+  "archive_type": "tar.gz"
 }

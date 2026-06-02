@@ -141,6 +141,11 @@ pub struct SourceJson {
     pub integrity: String,
     pub strip_prefix: String,
     pub url: String,
+    /// Override Bazel's archive-type detection from the URL extension.
+    /// codeload.github.com URLs don't end in `.tar.gz`, so Bazel can't
+    /// infer the type. Set to "tar.gz" for those.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub archive_type: Option<String>,
 }
 
 impl SourceJson {

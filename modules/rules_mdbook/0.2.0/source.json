@@ -1,5 +1,6 @@
 {
   "integrity": "sha256-EgLwuw7ECusp3KODng/iqQLnaQYa1eQg6oul43Yw60U=",
   "strip_prefix": "rules_mdbook-0.2.0",
-  "url": "https://codeload.github.com/fastverk/rules_mdbook/tar.gz/refs/tags/v0.2.0"
+  "url": "https://codeload.github.com/fastverk/rules_mdbook/tar.gz/refs/tags/v0.2.0",
+  "archive_type": "tar.gz"
 }
