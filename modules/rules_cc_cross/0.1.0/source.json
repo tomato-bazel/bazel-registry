@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-sG57wc6T5+nCkNbTJAqbRrUl/GptFBNd+StqS19XoxY=",
   "strip_prefix": "rules_cc_cross-0.1.0",
-  "url": "https://github.com/fastverk/rules_cc_cross/archive/refs/tags/v0.1.0.tar.gz"
+  "url": "https://codeload.github.com/fastverk/rules_cc_cross/tar.gz/refs/tags/v0.1.0"
 }

@@ -82,8 +82,15 @@ pub fn run(env: &Env, args: Args) -> Result<()> {
         None => {
             let repo = args.repo.as_ref().unwrap();
             let basename = repo_basename(repo)?;
+            // codeload.github.com (no redirect) instead of
+            // github.com/.../archive/... (which redirects to
+            // codeload). With a GitHub App installation token,
+            // the redirect strips the Authorization header and
+            // fastverk's private archives return 404. codeload
+            // accepts the Bearer token directly. Same bytes →
+            // integrity hashes unchanged.
             (
-                format!("https://github.com/{}/archive/refs/tags/{}.tar.gz", repo, tag),
+                format!("https://codeload.github.com/{}/tar.gz/refs/tags/{}", repo, tag),
                 args.strip_prefix
                     .clone()
                     .unwrap_or_else(|| format!("{}-{}", basename, args.version)),
