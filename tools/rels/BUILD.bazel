@@ -1,0 +1,35 @@
+load("@rels_crates//:defs.bzl", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_test")
+
+package(default_visibility = ["//visibility:public"])
+
+# `bazel run //tools/rels:rels -- <subcommand>` is the standard
+# entry point. Both nightly workflows and the registration flow
+# call into the same binary.
+rust_binary(
+    name = "rels",
+    srcs = [
+        "src/audit.rs",
+        "src/bump.rs",
+        "src/common.rs",
+        "src/main.rs",
+        "src/matrix.rs",
+        "src/mcp.rs",
+        "src/release.rs",
+        "src/scaffold.rs",
+    ],
+    crate_root = "src/main.rs",
+    edition = "2021",
+    deps = all_crate_deps(normal = True),
+)
+
+rust_test(
+    name = "rels_test",
+    crate = ":rels",
+    edition = "2021",
+)
+
+exports_files([
+    "Cargo.toml",
+    "Cargo.lock",
+])
