@@ -80,18 +80,6 @@ rules in tools/readme/categorization_rules.json.
 | [`rules_ssh_tui`](https://github.com/fastverk/rules_ssh_tui) | 0.0.5 | `fastverk/rules_ssh_tui` |
 | [`rules_uv`](https://github.com/fastverk/rules_uv) | 0.7.4 | `fastverk/rules_uv` |
 
-### Firefox Stack
-
-| Module | Latest | Repository |
-|---|---|---|
-| [`firefox_css_specs`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
-| [`firefox_html_parser`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
-| [`firefox_layout`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
-| [`firefox_ply`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
-| [`firefox_spidermonkey`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
-| [`firefox_webidl`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
-| [`firefox_webidl_parser`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
-
 <!-- /BOTNOC:MODULES_TABLE -->
 
 ## Quick start
