@@ -16,36 +16,30 @@ rules in tools/readme/categorization_rules.json.
 
 | Module | Latest | Repository |
 |---|---|---|
-| [`decomposer`](https://github.com/fastverk/decomposer) | 0.0.1 | `fastverk/decomposer` |
-| [`polyglot_ast`](https://github.com/fastverk/polyglot) | 0.0.10 | `fastverk/polyglot` |
 | [`rules_agentic_ide`](https://github.com/fastverk/rules_agentic_ide) | 0.0.3 | `fastverk/rules_agentic_ide` |
 | [`rules_ci_ir`](https://github.com/fastverk/rules_ci_ir) | 0.0.1 | `fastverk/rules_ci_ir` |
 | [`rules_lang`](https://github.com/fastverk/polyglot) | 0.0.13 | `fastverk/polyglot` |
 | [`rules_lean`](https://github.com/fastverk/rules_lean) | 0.3.0-rc1 | `fastverk/rules_lean` |
+| [`rules_polyglot`](https://github.com/fastverk/polyglot) | 0.0.10 | `fastverk/polyglot` |
 | [`rules_spec`](https://github.com/fastverk/rules_spec) | 0.5.1 | `fastverk/rules_spec` |
 
 ### UI and Rendering
 
 | Module | Latest | Repository |
 |---|---|---|
-| [`meridian`](https://github.com/mattmarshall/meridian) | 0.2.1 | `mattmarshall/meridian` |
-| [`pinax`](https://github.com/mattmarshall/pinax) | 0.1.0 | `mattmarshall/pinax` |
-| [`rules_naga`](https://github.com/fastverk/rules_naga) | 0.6.1 | `fastverk/rules_naga` |
-| [`rules_render`](https://github.com/fastverk/rules_render) | 0.3.0 | `fastverk/rules_render` |
+| [`rules_meridian`](https://github.com/mattmarshall/meridian) | 0.2.1 | `mattmarshall/meridian` |
 | [`rules_storybook`](https://github.com/fastverk/rules_storybook) | 0.1.0 | `fastverk/rules_storybook` |
 | [`rules_vite`](https://github.com/fastverk/rules_vite) | 0.1.0 | `fastverk/rules_vite` |
 | [`rules_walkthrough`](https://github.com/fastverk/rules_walkthrough) | 0.1.0 | `fastverk/rules_walkthrough` |
 | [`rules_web`](https://github.com/fastverk/rules_web) | 0.0.1 | `fastverk/rules_web` |
-| [`wgsl_stdlib`](https://github.com/fastverk/wgsl_stdlib) | 0.4.0 | `fastverk/wgsl_stdlib` |
 
 ### Cloud and Infrastructure
 
 | Module | Latest | Repository |
 |---|---|---|
 | [`rules_autoconf`](https://github.com/fastverk/rules_autoconf) | 0.1.0 | `fastverk/rules_autoconf` |
-| [`rules_aws_workflows`](https://github.com/fastverk/rules_aws_workflows) | 0.1.1 | `fastverk/rules_aws_workflows` |
 | [`rules_cloudformation`](https://github.com/fastverk/rules_cloudformation) | 0.7.0 | `fastverk/rules_cloudformation` |
-| [`rules_docker_compose`](https://github.com/fastverk/rules_docker_compose) | 0.2.6 | `fastverk/rules_docker_compose` |
+| [`rules_docker`](https://github.com/fastverk/rules_docker_compose) | 0.2.6 | `fastverk/rules_docker_compose` |
 | [`rules_github`](https://github.com/fastverk/rules_github) | 0.1.2 | `fastverk/rules_github` |
 | [`rules_gitlab`](https://github.com/fastverk/rules_gitlab) | 0.1.3 | `fastverk/rules_gitlab` |
 | [`rules_nextjs`](https://github.com/fastverk/rules_nextjs) | 0.2.0 | `fastverk/rules_nextjs` |

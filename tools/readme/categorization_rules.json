@@ -1,43 +1,40 @@
 {
   "Core": {
     "exact": [
-      "decomposer",
-      "polyglot_ast",
       "rules_agentic_ide",
       "rules_ci_ir",
       "rules_lang",
       "rules_lean",
-      "rules_spec"
+      "rules_spec",
+      "rules_polyglot"
     ],
     "prefix": []
   },
   "UI and Rendering": {
     "exact": [
-      "meridian",
-      "pinax",
       "rules_naga",
       "rules_render",
       "rules_storybook",
       "rules_vite",
       "rules_walkthrough",
       "rules_web",
-      "wgsl_stdlib"
+      "wgsl_stdlib",
+      "rules_meridian"
     ],
     "prefix": []
   },
   "Cloud and Infrastructure": {
     "exact": [
       "rules_autoconf",
-      "rules_aws_workflows",
       "rules_cloudformation",
-      "rules_docker_compose",
       "rules_github",
       "rules_gitlab",
       "rules_nextjs",
       "rules_openapi",
       "rules_postgres",
       "rules_runpod",
-      "rules_tectonic"
+      "rules_tectonic",
+      "rules_docker"
     ],
     "prefix": []
   },

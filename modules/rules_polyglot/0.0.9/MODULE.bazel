@@ -1,0 +1,45 @@
+"""polyglot_ast — the light Lean kernel shared across the polyglot ecosystem.
+
+A dependency-free (Lean core only) home for the language-agnostic AST and
+parsing infrastructure that several repos need in common:
+
+  * `Syntax.Expr`   — a generic expression AST (literal / variable / unary /
+    binary, operators spelled as `String`s) that serves every imperative
+    language front-end.
+  * `Syntax.Prec`   — a data-driven operator-precedence engine: a language
+    supplies an operator table (`Grammar`), the engine does the
+    recursive-descent precedence/associativity parsing.
+
+Consumers (`rules_lang`, `rules_texlive`, `rules_agentic_ide`,
+`rules_postgres`) depend on this kernel rather than on the heavy engine,
+so none inherits LLVM/Rust/Node/ML deps. This is the "factor out the
+generic core" pattern (cf. rules_meson extracted from rules_postgres).
+
+This module lives in the `polyglot` monorepo under `ast/` and is published
+to the premium registry via `strip_prefix = polyglot-<v>/ast` (the sibling
+`rules_lang` module is published from the repo root). PRIVATE / NDA.
+"""
+
+module(
+    name = "rules_polyglot",
+    version = "0.0.9",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+bazel_dep(name = "rules_lean", version = "0.3.7")
+
+# Dep-free Lean toolchain (core only). Pinned to v4.30.0-rc2 to match the
+# Polyglot body in rules_lang / polyglot (rules_texlive bumps to match when
+# it adopts the kernel). The lakefile exists only so rules_lean's
+# `lake.workspace` extension can provision the toolchain.
+lake = use_extension("@rules_lean//lean:lake.bzl", "lake")
+lake.workspace(
+    name = "polyglot_ast_lake",
+    lakefile = "//lean:lakefile.lean",
+    lake_manifest = "//lean:lake-manifest.json",
+    lean_toolchain = "//lean:lean-toolchain",
+)
+use_repo(lake, "polyglot_ast_lake")
+register_toolchains("@polyglot_ast_lake//:lean_toolchain_def")
