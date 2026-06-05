@@ -1,7 +1,0 @@
-# firefox_css_specs — exposes Firefox's `layout/style/` tree as filegroups.
-
-filegroup(
-    name = "all",
-    srcs = glob(["**/*"], allow_empty = True),
-    visibility = ["//visibility:public"],
-)

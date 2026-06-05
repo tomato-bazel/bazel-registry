@@ -1,7 +1,0 @@
-# firefox_html_parser — exposes Firefox's `parser/html/` tree as filegroups.
-
-filegroup(
-    name = "all",
-    srcs = glob(["**/*"], allow_empty = True),
-    visibility = ["//visibility:public"],
-)
