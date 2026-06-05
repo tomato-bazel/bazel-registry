@@ -1,0 +1,15 @@
+load("//:tools/readme/defs.bzl", "readme_from_registry_metadata")
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "module_metadata",
+    srcs = glob(["modules/*/metadata.json"]),
+)
+
+readme_from_registry_metadata(
+    name = "readme",
+    template = "//:tools/readme/README.md.tmpl",
+    metadata = ":module_metadata",
+    categorization_rules = "//:tools/readme/categorization_rules.json",
+)

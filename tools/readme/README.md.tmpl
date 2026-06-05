@@ -1,0 +1,114 @@
+# fastverk bazel-registry
+
+Bzlmod registry for fastverk Bazel modules.
+
+The registry repo itself is public. It describes where to fetch each
+module source tarball. Some module entries point at private GitHub
+repos and require auth (covered below).
+
+## Modules
+
+This section is generated from local registry metadata and category
+rules in tools/readme/categorization_rules.json.
+
+<!-- BOTNOC:MODULES_TABLE -->
+{{CATEGORIZED_MODULE_TABLES}}
+<!-- /BOTNOC:MODULES_TABLE -->
+
+## Quick start
+
+Add the registry chain to your consumer's .bazelrc:
+
+```
+common --registry=https://raw.githubusercontent.com/fastverk/bazel-registry/main/
+common --registry=https://bcr.bazel.build/
+```
+
+Put this registry before BCR so its entries win for overlapping module
+names.
+
+Then declare the dep in MODULE.bazel:
+
+```python
+bazel_dep(name = "rules_lora", version = "0.0.1")
+```
+
+That is it: no local_path_override needed. The registry resolves the
+module's MODULE.bazel + source.json and Bazel fetches the tarball URL.
+
+## Auth
+
+For module entries that point at private GitHub repos, Bazel needs to
+forward GitHub credentials when fetching. Two equivalent approaches:
+
+### Option A: Bazel credential helper (recommended)
+
+Project-local and does not pollute global state. Drop a small shell
+script into your repo and reference it from .bazelrc. The canonical
+implementation lives in
+https://github.com/fastverk/rules_postgres/blob/main/tools/credhelper/gh-cred-helper.sh
+and forwards gh auth token (or GITHUB_TOKEN / GH_TOKEN) as a bearer
+header.
+
+Wire it in .bazelrc:
+
+```
+common --credential_helper=*.github.com=%workspace%/tools/credhelper/gh-cred-helper.sh
+common --credential_helper=github.com=%workspace%/tools/credhelper/gh-cred-helper.sh
+common --credential_helper=raw.githubusercontent.com=%workspace%/tools/credhelper/gh-cred-helper.sh
+common --credential_helper=codeload.github.com=%workspace%/tools/credhelper/gh-cred-helper.sh
+```
+
+### Option B: ~/.netrc
+
+```
+machine api.github.com
+  login <your-github-username>
+  password <gh-personal-access-token-with-repo-scope>
+
+machine codeload.github.com
+  login <your-github-username>
+  password <gh-personal-access-token-with-repo-scope>
+
+machine raw.githubusercontent.com
+  login <your-github-username>
+  password <gh-personal-access-token-with-repo-scope>
+```
+
+Run chmod 600 ~/.netrc. Bazel reads this automatically.
+
+## Maintenance
+
+Adding a new version or onboarding a new module goes through rels:
+https://github.com/fastverk/bazel-registry/tree/main/tools/rels
+
+```sh
+cd ~/Workspace/rules_lora
+git tag v0.0.2 -m "rules_lora v0.0.2"
+git push origin v0.0.2
+
+cd ~/Workspace/bazel-registry
+GH_TOKEN=$(gh auth token) \
+  tools/rels/target/release/rels release \
+    --repo fastverk/rules_lora \
+    --version 0.0.2 \
+    --registry-root ~/Workspace/bazel-registry
+
+git add modules/rules_lora
+git commit -m "Register rules_lora v0.0.2"
+git push origin main
+```
+
+## When to use this registry
+
+Use this registry for fastverk-owned modules.
+
+## Module-table maintenance
+
+Regenerate README from local metadata with:
+
+```sh
+bazel run //:readme.write
+```
+
+The companion test target //:readme.write_test detects drift in CI.

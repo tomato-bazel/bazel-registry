@@ -1,0 +1,76 @@
+{
+  "Core": {
+    "exact": [
+      "decomposer",
+      "polyglot_ast",
+      "rules_agentic_ide",
+      "rules_ci_ir",
+      "rules_lang",
+      "rules_lean",
+      "rules_spec"
+    ],
+    "prefix": []
+  },
+  "UI and Rendering": {
+    "exact": [
+      "meridian",
+      "pinax",
+      "rules_naga",
+      "rules_render",
+      "rules_storybook",
+      "rules_vite",
+      "rules_walkthrough",
+      "rules_web",
+      "wgsl_stdlib"
+    ],
+    "prefix": []
+  },
+  "Cloud and Infrastructure": {
+    "exact": [
+      "rules_autoconf",
+      "rules_aws_workflows",
+      "rules_cloudformation",
+      "rules_docker_compose",
+      "rules_github",
+      "rules_gitlab",
+      "rules_nextjs",
+      "rules_openapi",
+      "rules_postgres",
+      "rules_runpod",
+      "rules_tectonic"
+    ],
+    "prefix": []
+  },
+  "Data and Knowledge": {
+    "exact": [
+      "rules_beam",
+      "rules_huggingface",
+      "rules_jena",
+      "rules_jsonschema",
+      "rules_puml",
+      "rules_rdf",
+      "rules_schema_org"
+    ],
+    "prefix": []
+  },
+  "Language and Build Tooling": {
+    "exact": [
+      "rules_bibtex",
+      "rules_bun",
+      "rules_cc_cross",
+      "rules_chrome",
+      "rules_lora",
+      "rules_mdbook",
+      "rules_meson",
+      "rules_ssh_tui",
+      "rules_uv"
+    ],
+    "prefix": []
+  },
+  "Firefox Stack": {
+    "exact": [],
+    "prefix": [
+      "firefox_"
+    ]
+  }
+}

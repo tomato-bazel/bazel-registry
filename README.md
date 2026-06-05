@@ -8,43 +8,95 @@ repos and require auth (covered below).
 
 ## Modules
 
-Organized by family. Some entries point at private GitHub repos, so
-fetching tarballs may require auth (see "Auth" below).
-
-### Polyglot translation + ML training
+This section is generated from local registry metadata and category
+rules in tools/readme/categorization_rules.json.
 
 <!-- BOTNOC:MODULES_TABLE -->
-| Module | Latest | Description |
+### Core
+
+| Module | Latest | Repository |
 |---|---|---|
-| [`rules_lora`](https://github.com/fastverk/rules_lora) | 0.0.1 | Bazel-native LoRA fine-tuning. Four declarative macros: `lora_dataset`, `lora_recipe`, `lora_train`, `expert_manifest`. RunPod / local-CPU backends; torchtune-rendered recipes. |
-| [`rules_meson`](https://github.com/fastverk/rules_meson) | 0.0.0 | Hermetic meson + ninja toolchain for Bazel. `meson_configure` runs `meson setup` as a build action; consumers get a deterministic `compile_commands.json`. |
+| [`decomposer`](https://github.com/fastverk/decomposer) | 0.0.1 | `fastverk/decomposer` |
+| [`polyglot_ast`](https://github.com/fastverk/polyglot) | 0.0.10 | `fastverk/polyglot` |
+| [`rules_agentic_ide`](https://github.com/fastverk/rules_agentic_ide) | 0.0.3 | `fastverk/rules_agentic_ide` |
+| [`rules_ci_ir`](https://github.com/fastverk/rules_ci_ir) | 0.0.1 | `fastverk/rules_ci_ir` |
+| [`rules_lang`](https://github.com/fastverk/polyglot) | 0.0.13 | `fastverk/polyglot` |
+| [`rules_lean`](https://github.com/fastverk/rules_lean) | 0.3.0-rc1 | `fastverk/rules_lean` |
+| [`rules_spec`](https://github.com/fastverk/rules_spec) | 0.5.1 | `fastverk/rules_spec` |
 
-### UI + rendering (proto-driven + WGSL)
+### UI and Rendering
 
-| Module | Latest | Description |
+| Module | Latest | Repository |
 |---|---|---|
-| [`pinax`](https://github.com/mattmarshall/pinax) | 0.1.0 | Meridian-backed JVM application + adhoc-factory web surface (sparql / graph / knowledge probes). |
-| [`rules_naga`](https://github.com/fastverk/rules_naga) | 0.6.1 | Bazel-native WGSL validation, composition, and JS-module emission. Wraps `naga` (Mozilla's WGSL compiler) as a `rust_binary` driver. |
-| [`wgsl_stdlib`](https://github.com/fastverk/wgsl_stdlib) | 0.4.0 | Reusable WebGPU shader snippets (colormap, complex math, ζ-function, lighting, mesh, contour/grid) validated via `rules_naga`. |
-| [`rules_render`](https://github.com/fastverk/rules_render) | 0.3.0 | Bazel-native WGSL rendering framework. Typed providers + rules for materials, surfaces, scenes, passes, pipelines, and apps. |
-| [`rules_walkthrough`](https://github.com/fastverk/rules_walkthrough) | 0.1.0 | Bazel rules for declarative slide-deck rendering: `walkthrough.v1.Walkthrough` JSON → self-contained static site (renderer JS + KaTeX + marked + per-deck data sidecars). |
+| [`meridian`](https://github.com/mattmarshall/meridian) | 0.2.1 | `mattmarshall/meridian` |
+| [`pinax`](https://github.com/mattmarshall/pinax) | 0.1.0 | `mattmarshall/pinax` |
+| [`rules_naga`](https://github.com/fastverk/rules_naga) | 0.6.1 | `fastverk/rules_naga` |
+| [`rules_render`](https://github.com/fastverk/rules_render) | 0.3.0 | `fastverk/rules_render` |
+| [`rules_storybook`](https://github.com/fastverk/rules_storybook) | 0.1.0 | `fastverk/rules_storybook` |
+| [`rules_vite`](https://github.com/fastverk/rules_vite) | 0.1.0 | `fastverk/rules_vite` |
+| [`rules_walkthrough`](https://github.com/fastverk/rules_walkthrough) | 0.1.0 | `fastverk/rules_walkthrough` |
+| [`rules_web`](https://github.com/fastverk/rules_web) | 0.0.1 | `fastverk/rules_web` |
+| [`wgsl_stdlib`](https://github.com/fastverk/wgsl_stdlib) | 0.4.0 | `fastverk/wgsl_stdlib` |
 
-### Embedded systems (seL4 / microkit / hardware)
+### Cloud and Infrastructure
 
-| Module | Latest | Description |
+| Module | Latest | Repository |
 |---|---|---|
-| [`rules_cc_cross`](https://github.com/fastverk/rules_cc_cross) | 0.1.0 | Hermetic ARM/RISC-V/x86 cross-compiler toolchains for embedded Bazel builds (seL4, microkit, bare-metal). |
+| [`rules_autoconf`](https://github.com/fastverk/rules_autoconf) | 0.1.0 | `fastverk/rules_autoconf` |
+| [`rules_aws_workflows`](https://github.com/fastverk/rules_aws_workflows) | 0.1.1 | `fastverk/rules_aws_workflows` |
+| [`rules_cloudformation`](https://github.com/fastverk/rules_cloudformation) | 0.7.0 | `fastverk/rules_cloudformation` |
+| [`rules_docker_compose`](https://github.com/fastverk/rules_docker_compose) | 0.2.6 | `fastverk/rules_docker_compose` |
+| [`rules_github`](https://github.com/fastverk/rules_github) | 0.1.2 | `fastverk/rules_github` |
+| [`rules_gitlab`](https://github.com/fastverk/rules_gitlab) | 0.1.3 | `fastverk/rules_gitlab` |
+| [`rules_nextjs`](https://github.com/fastverk/rules_nextjs) | 0.2.0 | `fastverk/rules_nextjs` |
+| [`rules_openapi`](https://github.com/fastverk/rules_openapi) | 0.2.1 | `fastverk/rules_openapi` |
+| [`rules_postgres`](https://github.com/fastverk/rules_postgres) | 0.4.1 | `fastverk/rules_postgres` |
+| [`rules_runpod`](https://github.com/fastverk/rules_runpod) | 0.0.10 | `fastverk/rules_runpod` |
+| [`rules_tectonic`](https://github.com/fastverk/rules_tectonic) | 0.2.0 | `fastverk/rules_tectonic` |
 
-### Hardware design (HDL / EDA)
+### Data and Knowledge
 
-Hardware/EDA modules were migrated to citizen-sh ownership and are now
-published through
-[`citizen-sh/bazel-registry`](https://github.com/citizen-sh/bazel-registry).
+| Module | Latest | Repository |
+|---|---|---|
+| [`rules_beam`](https://github.com/fastverk/rules_beam) | 0.0.2 | `fastverk/rules_beam` |
+| [`rules_huggingface`](https://github.com/fastverk/rules_huggingface) | 0.0.3 | `fastverk/rules_huggingface` |
+| [`rules_jena`](https://github.com/fastverk/rules_jena) | 0.3.2 | `fastverk/rules_jena` |
+| [`rules_jsonschema`](https://github.com/fastverk/rules_jsonschema) | 0.3.0 | `fastverk/rules_jsonschema` |
+| [`rules_puml`](https://github.com/fastverk/rules_puml) | 0.0.2 | `fastverk/rules_puml` |
+| [`rules_rdf`](https://github.com/fastverk/rules_rdf) | 0.3.0 | `fastverk/rules_rdf` |
+| [`rules_schema_org`](https://github.com/fastverk/rules_schema_org) | 0.0.1 | `fastverk/rules_schema_org` |
+
+### Language and Build Tooling
+
+| Module | Latest | Repository |
+|---|---|---|
+| [`rules_bibtex`](https://github.com/fastverk/rules_bibtex) | 0.0.6 | `fastverk/rules_bibtex` |
+| [`rules_bun`](https://github.com/fastverk/rules_bun) | 0.2.0 | `fastverk/rules_bun` |
+| [`rules_cc_cross`](https://github.com/fastverk/rules_cc_cross) | 0.1.0 | `fastverk/rules_cc_cross` |
+| [`rules_chrome`](https://github.com/fastverk/rules_chrome) | 0.1.0 | `fastverk/rules_chrome` |
+| [`rules_lora`](https://github.com/fastverk/rules_lora) | 0.0.35 | `fastverk/rules_lora` |
+| [`rules_mdbook`](https://github.com/fastverk/rules_mdbook) | 0.3.1 | `fastverk/rules_mdbook` |
+| [`rules_meson`](https://github.com/fastverk/rules_meson) | 0.0.0 | `fastverk/rules_meson` |
+| [`rules_ssh_tui`](https://github.com/fastverk/rules_ssh_tui) | 0.0.5 | `fastverk/rules_ssh_tui` |
+| [`rules_uv`](https://github.com/fastverk/rules_uv) | 0.7.4 | `fastverk/rules_uv` |
+
+### Firefox Stack
+
+| Module | Latest | Repository |
+|---|---|---|
+| [`firefox_css_specs`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
+| [`firefox_html_parser`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
+| [`firefox_layout`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
+| [`firefox_ply`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
+| [`firefox_spidermonkey`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
+| [`firefox_webidl`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
+| [`firefox_webidl_parser`](https://github.com/fastverk/rules_firefox) | 0.0.1 | `fastverk/rules_firefox` |
+
 <!-- /BOTNOC:MODULES_TABLE -->
 
 ## Quick start
 
-Add the registry chain to your consumer's `.bazelrc`:
+Add the registry chain to your consumer's .bazelrc:
 
 ```
 common --registry=https://raw.githubusercontent.com/fastverk/bazel-registry/main/
@@ -54,31 +106,30 @@ common --registry=https://bcr.bazel.build/
 Put this registry before BCR so its entries win for overlapping module
 names.
 
-Then declare the dep in `MODULE.bazel`:
+Then declare the dep in MODULE.bazel:
 
 ```python
 bazel_dep(name = "rules_lora", version = "0.0.1")
 ```
 
-That's it — no `local_path_override` needed. The registry resolves
-the module's `MODULE.bazel` + `source.json`; Bazel fetches the tarball
-via the source.json URL (GitHub auth may be required — see below).
+That is it: no local_path_override needed. The registry resolves the
+module's MODULE.bazel + source.json and Bazel fetches the tarball URL.
 
 ## Auth
 
 For module entries that point at private GitHub repos, Bazel needs to
 forward GitHub credentials when fetching. Two equivalent approaches:
 
-### Option A — Bazel credential helper (recommended)
+### Option A: Bazel credential helper (recommended)
 
-Project-local, doesn't pollute global state. Drop a small shell
-script into your repo and reference it from `.bazelrc`. The canonical
+Project-local and does not pollute global state. Drop a small shell
+script into your repo and reference it from .bazelrc. The canonical
 implementation lives in
-[`rules_postgres/tools/credhelper/gh-cred-helper.sh`](https://github.com/fastverk/rules_postgres/blob/main/tools/credhelper/gh-cred-helper.sh)
-— ~30 LOC, forwards `gh auth token` (or `GITHUB_TOKEN` / `GH_TOKEN`
-env) as a Bearer auth header.
+https://github.com/fastverk/rules_postgres/blob/main/tools/credhelper/gh-cred-helper.sh
+and forwards gh auth token (or GITHUB_TOKEN / GH_TOKEN) as a bearer
+header.
 
-Wire it in `.bazelrc`:
+Wire it in .bazelrc:
 
 ```
 common --credential_helper=*.github.com=%workspace%/tools/credhelper/gh-cred-helper.sh
@@ -87,13 +138,7 @@ common --credential_helper=raw.githubusercontent.com=%workspace%/tools/credhelpe
 common --credential_helper=codeload.github.com=%workspace%/tools/credhelper/gh-cred-helper.sh
 ```
 
-Then any `bazel build`/`bazel run` invocation just works — the helper
-picks up your `gh` CLI auth automatically.
-
-### Option B — `~/.netrc`
-
-Simpler, but writes a long-lived token to a file in your home
-directory. Add to `~/.netrc`:
+### Option B: ~/.netrc
 
 ```
 machine api.github.com
@@ -109,28 +154,18 @@ machine raw.githubusercontent.com
   password <gh-personal-access-token-with-repo-scope>
 ```
 
-`chmod 600 ~/.netrc`. Bazel reads this automatically.
-
-### CI
-
-For GitHub Actions, set `GITHUB_TOKEN` in the env (the workflow's
-built-in `secrets.GITHUB_TOKEN` works if the workflow's repo has
-access to the private modules). The credential helper above falls
-back to `GITHUB_TOKEN` / `GH_TOKEN` automatically.
+Run chmod 600 ~/.netrc. Bazel reads this automatically.
 
 ## Maintenance
 
-Adding a new version of an existing module, or onboarding a new
-module, both go through the [`rels`](https://github.com/fastverk/bazel-registry/tree/main/tools/rels)
-CLI shipped from this registry:
+Adding a new version or onboarding a new module goes through rels:
+https://github.com/fastverk/bazel-registry/tree/main/tools/rels
 
 ```sh
-# Cut a new release in the source repo first
 cd ~/Workspace/rules_lora
 git tag v0.0.2 -m "rules_lora v0.0.2"
 git push origin v0.0.2
 
-# Then register it in this registry
 cd ~/Workspace/bazel-registry
 GH_TOKEN=$(gh auth token) \
   tools/rels/target/release/rels release \
@@ -138,33 +173,21 @@ GH_TOKEN=$(gh auth token) \
     --version 0.0.2 \
     --registry-root ~/Workspace/bazel-registry
 
-# Commit + push the registry update
-cd ~/Workspace/bazel-registry
 git add modules/rules_lora
 git commit -m "Register rules_lora v0.0.2"
 git push origin main
 ```
 
-`rels` fetches the GitHub tarball (using `GH_TOKEN` / `GITHUB_TOKEN` /
-`gh auth token`), computes the integrity hash, extracts the module's
-`MODULE.bazel`, and writes the registry entries. The
-[`rels release --help`](https://github.com/fastverk/bazel-registry/tree/main/tools/rels)
-docs cover the full flag surface.
-
-## When to use this registry vs citizen-sh
+## When to use this registry
 
 Use this registry for fastverk-owned modules.
 
-For citizen-sh-owned private modules, use
-[`citizen-sh/bazel-registry`](https://github.com/citizen-sh/bazel-registry)
-first in your registry chain, then this registry, then BCR.
-
 ## Module-table maintenance
 
-The module table above is hand-edited until [`botnoc-readme`](https://github.com/fastverk/botnoc)
-learns to handle private-tarball registries (it currently only
-walks the public registry). Track that work in fastverk/botnoc.
+Regenerate README from local metadata with:
 
-When adding/removing modules manually, keep the table in alphabetical
-order and within the `BOTNOC:MODULES_TABLE` markers — the same
-splicer convention as the public registry's profile README.
+```sh
+bazel run //:readme.write
+```
+
+The companion test target //:readme.write_test detects drift in CI.
