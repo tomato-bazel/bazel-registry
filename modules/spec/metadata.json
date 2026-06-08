@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/spec",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/spec"
+  ],
+  "versions": [
+    "0.5.2"
+  ],
+  "yanked_versions": {}
+}
