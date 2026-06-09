@@ -1,0 +1,5 @@
+{
+  "integrity": "sha256-Yb4Bp3jAl4gWgR/ACqJE3KTLWzBLlV6tBgYxG1TBgSo=",
+  "strip_prefix": "rules_postgres-0.7.0",
+  "url": "https://github.com/fastverk/rules_postgres/archive/refs/tags/v0.7.0.tar.gz"
+}
