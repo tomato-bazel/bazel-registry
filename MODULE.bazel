@@ -1,3 +1,24 @@
 module(name = "fastverk_bazel_registry", version = "0.0.0")
 
 bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
+
+# rules_rust: build the //tools/rels maintenance CLI via Bazel (output lands
+# in bazel-out, so there's never a committed cargo target/). Mirrors the
+# monorepo's other rust-tool repos (rules_docker_compose, rules_ci).
+bazel_dep(name = "rules_rust", version = "0.70.0")
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(edition = "2021")
+use_repo(rust, "rust_toolchains")
+
+register_toolchains("@rust_toolchains//:all")
+
+# @rels_crates — the crate_universe for //tools/rels, resolved from its
+# Cargo.toml + Cargo.lock (the BUILD.bazel loads @rels_crates//:defs.bzl).
+crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
+crate.from_cargo(
+    name = "rels_crates",
+    cargo_lockfile = "//tools/rels:Cargo.lock",
+    manifests = ["//tools/rels:Cargo.toml"],
+)
+use_repo(crate, "rels_crates")
