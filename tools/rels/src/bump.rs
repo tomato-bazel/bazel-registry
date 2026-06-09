@@ -142,35 +142,49 @@ struct Edit {
 
 fn scan_workspaces(env: &Env, module: &str, to_version: &str) -> Result<Vec<Edit>> {
     let mut edits = Vec::new();
-    for entry in fs::read_dir(&env.workspaces_root)
-        .with_context(|| format!("read_dir {}", env.workspaces_root.display()))?
-    {
-        let entry = entry?;
-        if !entry.file_type()?.is_dir() {
+    let mut seen = std::collections::HashSet::new();
+    for root in env.workspace_search_roots() {
+        if !root.is_dir() {
             continue;
         }
-        let repo = entry.file_name().to_string_lossy().to_string();
-        // Skip the registry itself — it's a sibling but doesn't carry
-        // bazel_deps the way rules_* do.
-        if entry.path() == env.registry_root {
-            continue;
-        }
-        let module_bazel = entry.path().join("MODULE.bazel");
-        if !module_bazel.is_file() {
-            continue;
-        }
-        let content = fs::read_to_string(&module_bazel)
-            .with_context(|| format!("read {}", module_bazel.display()))?;
-        if let Some((new_content, from_version, was_dev_dep)) =
-            rewrite_dep(&content, module, to_version)
+        for entry in fs::read_dir(&root)
+            .with_context(|| format!("read_dir {}", root.display()))?
         {
-            edits.push(Edit {
-                repo,
-                module_bazel,
-                from_version,
-                was_dev_dep,
-                new_content,
-            });
+            let entry = entry?;
+            if !entry.file_type()?.is_dir() {
+                continue;
+            }
+            let path = entry.path();
+            // Skip registry checkout itself if discovered in the flat layout.
+            if path == env.registry_root {
+                continue;
+            }
+            let module_bazel = path.join("MODULE.bazel");
+            if !module_bazel.is_file() {
+                continue;
+            }
+            // Prevent duplicate scans when a repo is reachable via
+            // multiple search roots.
+            let key = fs::canonicalize(&module_bazel)
+                .unwrap_or(module_bazel.clone());
+            if !seen.insert(key) {
+                continue;
+            }
+
+            let repo = entry.file_name().to_string_lossy().to_string();
+            let content = fs::read_to_string(&module_bazel)
+                .with_context(|| format!("read {}", module_bazel.display()))?;
+            if let Some((new_content, from_version, was_dev_dep)) =
+                rewrite_dep(&content, module, to_version)
+            {
+                edits.push(Edit {
+                    repo,
+                    module_bazel,
+                    from_version,
+                    was_dev_dep,
+                    new_content,
+                });
+            }
         }
     }
     edits.sort_by(|a, b| a.repo.cmp(&b.repo));

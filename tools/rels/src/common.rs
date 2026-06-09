@@ -52,10 +52,77 @@ impl Env {
         self.registry_root.join("modules")
     }
 
-    /// Path to the sibling checkout for a given module name. Falls
-    /// back to `<workspaces_root>/<module_name>` even if it doesn't
-    /// exist on disk — the caller decides what to do on absence.
+    /// Directories that may hold module checkouts in the local
+    /// workspace reorg (flat legacy + org-root layouts).
+    pub fn workspace_search_roots(&self) -> Vec<PathBuf> {
+        vec![
+            self.workspaces_root.clone(),
+            self.workspaces_root.join("fastverk").join("repos"),
+            self.workspaces_root.join("mattmarshall"),
+            self.workspaces_root.join("mattmarshall").join("repos"),
+            self.workspaces_root.join("citizen-sh"),
+            self.workspaces_root.join("citizen-sh").join("repos"),
+            self.workspaces_root.join("savvi"),
+            self.workspaces_root.join("savvi").join("aion"),
+            self.workspaces_root.join("savvi").join("aion").join("repos"),
+            self.workspaces_root.join("savvi").join("platform"),
+            self.workspaces_root.join("savvi").join("platform").join("repos"),
+            self.workspaces_root.join("savvi").join("studio"),
+        ]
+    }
+
+    fn module_logical_names(module_name: &str) -> Vec<String> {
+        let mut names = vec![module_name.to_string()];
+        match module_name {
+            // Reorg rename aliases.
+            "rules_spec" => names.push("spec".to_string()),
+            "rules_ci_ir" => names.push("rules_ci".to_string()),
+            "rules_lang" => names.push("polyglot".to_string()),
+            "rules_walkthrough" => names.push("preso".to_string()),
+            _ => {}
+        }
+        names
+    }
+
+    /// Candidate paths for a module checkout (existing dirs first,
+    /// then plausible legacy/new-layout fallbacks).
+    pub fn checkout_path_candidates(&self, module_name: &str) -> Vec<PathBuf> {
+        let mut candidates = Vec::new();
+        match module_name {
+            // rules_walkthrough is being moved to mattmarshall/preso.
+            "rules_walkthrough" => {
+                candidates.push(self.workspaces_root.join("mattmarshall").join("preso"));
+                candidates.push(self.workspaces_root.join("mattmarshall").join("repos").join("preso"));
+            }
+            // rules_lang is locally overridden to savvi/aion/polyglot.
+            "rules_lang" => {
+                candidates.push(self.workspaces_root.join("savvi").join("aion").join("polyglot"));
+            }
+            _ => {}
+        }
+        for logical in Self::module_logical_names(module_name) {
+            // Special-case known nested checkouts.
+            if module_name == "polyglot_ast" {
+                candidates.push(self.workspaces_root.join("fastverk").join("repos").join("polyglot").join("ast"));
+                candidates.push(self.workspaces_root.join("savvi").join("aion").join("polyglot").join("ast"));
+            }
+            for root in self.workspace_search_roots() {
+                candidates.push(root.join(&logical));
+            }
+        }
+        candidates
+    }
+
+    /// Path to the sibling checkout for a given module name: the first
+    /// candidate that exists on disk, else the legacy
+    /// `<workspaces_root>/<module_name>` fallback (the caller decides
+    /// what to do on absence).
     pub fn checkout_path(&self, module_name: &str) -> PathBuf {
+        for cand in self.checkout_path_candidates(module_name) {
+            if cand.is_dir() {
+                return cand;
+            }
+        }
         self.workspaces_root.join(module_name)
     }
 }
