@@ -1,0 +1,25 @@
+# Bazel-idiomatic, hermetic Linux VMs on macOS via Apple Virtualization.framework, with a pluggable VMM provider seam (vfkit first).
+module(
+    name = "rules_macvm",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# Dev-only: the mock VMM (sh_binary) for tests, the smoke sh_tests, and
+# stardoc. Consumers don't pull these.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
+
+# Dev-only: fetch @vfkit so the macOS-gated signature/version smoke in
+# //examples/smoke can run. Consumers call `use_extension` themselves
+# (see README). The toolchain is exec-constrained to macOS, so on Linux
+# CI it's fetched but never resolved.
+vfkit = use_extension("//providers/vfkit:extensions.bzl", "vfkit", dev_dependency = True)
+use_repo(vfkit, "vfkit")
+
+register_toolchains(
+    "@vfkit//:vfkit_toolchain_def",
+    dev_dependency = True,
+)

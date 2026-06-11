@@ -1,0 +1,29 @@
+# Hermetic, Bazel-idiomatic Podman: a pinned podman-client toolchain plus run/build/image-load rules.
+module(
+    name = "rules_podman",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# Powers `podman_machine` (//podman/machine): a self-managed, pinned VM
+# that runs the podman service on macOS, where daemonless isn't possible.
+# Linux consumers pull this dep but never fetch a VMM (the vfkit binary
+# is only fetched if you use @rules_macvm's vfkit extension).
+bazel_dep(name = "rules_macvm", version = "0.0.1")
+
+# Dev-only: only loaded by docs/BUILD.bazel and examples/smoke/...
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
+
+# Dev-only end-to-end smoke: pulls @podman for
+# `bazel test //examples/smoke:...`. Consumers don't see this — they
+# call `use_extension` themselves in their own MODULE.bazel (see README).
+podman = use_extension("//podman:extensions.bzl", "podman", dev_dependency = True)
+use_repo(podman, "podman")
+
+register_toolchains(
+    "@podman//:podman_toolchain_def",
+    dev_dependency = True,
+)
