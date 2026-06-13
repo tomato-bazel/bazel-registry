@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/polyglot",
+  "homepage": "https://github.com/fastverk/rules_lang",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,33 +7,10 @@
     }
   ],
   "repository": [
-    "github:fastverk/polyglot",
     "github:fastverk/rules_lang"
   ],
   "versions": [
-    "0.0.0",
-    "0.0.1",
-    "0.0.2",
-    "0.0.3",
-    "0.0.4",
-    "0.0.5",
-    "0.0.6",
-    "0.0.7",
-    "0.0.8",
-    "0.0.9",
-    "0.0.10",
-    "0.0.11",
-    "0.0.12",
-    "0.0.13",
     "0.2.0"
   ],
-  "yanked_versions": {
-    "0.0.0": "Superseded: rules_lang is now published from the fastverk/polyglot monorepo (repo root) as of 0.0.7; the standalone fastverk/rules_lang repo is archived. Upgrade to 0.0.7.",
-    "0.0.1": "Superseded by the fastverk/polyglot monorepo (0.0.7); standalone repo archived. Upgrade to 0.0.7.",
-    "0.0.2": "Superseded by the fastverk/polyglot monorepo (0.0.7); standalone repo archived. Upgrade to 0.0.7.",
-    "0.0.3": "Superseded by the fastverk/polyglot monorepo (0.0.7); standalone repo archived. Upgrade to 0.0.7.",
-    "0.0.4": "Superseded by the fastverk/polyglot monorepo (0.0.7); standalone repo archived. Upgrade to 0.0.7.",
-    "0.0.5": "Superseded by the fastverk/polyglot monorepo (0.0.7); standalone repo archived. Upgrade to 0.0.7.",
-    "0.0.6": "Superseded by the fastverk/polyglot monorepo (0.0.7); standalone repo archived. Upgrade to 0.0.7."
-  }
+  "yanked_versions": {}
 }

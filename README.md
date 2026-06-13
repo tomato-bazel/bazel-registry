@@ -18,9 +18,8 @@ rules in tools/readme/categorization_rules.json.
 |---|---|---|
 | [`rules_agentic_ide`](https://github.com/fastverk/rules_agentic_ide) | 0.0.3 | `fastverk/rules_agentic_ide` |
 | [`rules_ci_ir`](https://github.com/fastverk/rules_ci_ir) | 0.0.1 | `fastverk/rules_ci_ir` |
-| [`rules_lang`](https://github.com/fastverk/polyglot) | 0.0.13 | `fastverk/polyglot` |
+| [`rules_lang`](https://github.com/fastverk/rules_lang) | 0.2.0 | `fastverk/rules_lang` |
 | [`rules_lean`](https://github.com/fastverk/rules_lean) | 0.3.0-rc1 | `fastverk/rules_lean` |
-| [`rules_polyglot`](https://github.com/fastverk/polyglot) | 0.0.10 | `fastverk/polyglot` |
 | [`rules_spec`](https://github.com/fastverk/rules_spec) | 0.5.1 | `fastverk/rules_spec` |
 
 ### UI and Rendering
