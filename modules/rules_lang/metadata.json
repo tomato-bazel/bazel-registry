@@ -7,7 +7,8 @@
     }
   ],
   "repository": [
-    "github:fastverk/polyglot"
+    "github:fastverk/polyglot",
+    "github:fastverk/rules_lang"
   ],
   "versions": [
     "0.0.0",
@@ -23,7 +24,8 @@
     "0.0.10",
     "0.0.11",
     "0.0.12",
-    "0.0.13"
+    "0.0.13",
+    "0.2.0"
   ],
   "yanked_versions": {
     "0.0.0": "Superseded: rules_lang is now published from the fastverk/polyglot monorepo (repo root) as of 0.0.7; the standalone fastverk/rules_lang repo is archived. Upgrade to 0.0.7.",
