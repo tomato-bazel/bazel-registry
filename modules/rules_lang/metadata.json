@@ -10,7 +10,8 @@
     "github:fastverk/rules_lang"
   ],
   "versions": [
-    "0.2.0"
+    "0.2.0",
+    "0.3.0"
   ],
   "yanked_versions": {}
 }
