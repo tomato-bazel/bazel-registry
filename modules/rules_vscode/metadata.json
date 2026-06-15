@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/fastverk/rules_vscode",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/rules_vscode"
+  ],
+  "versions": [
+    "0.0.2"
+  ],
+  "yanked_versions": {}
+}
