@@ -1,0 +1,27 @@
+# Bazel rules for XSD: offline schema validation + XSD→RDF/OWL vocabulary
+# generation. An XSD is rarely standalone (USLM-1.0 imports XML, Dublin Core,
+# XHTML), so a schema is modeled as an `xsd_schema` closure (XsdInfo, the XSD
+# analog of rules_rdf's rdf_dataset). Two capabilities over that closure:
+#   * xsd_validate_test — offline validation (bundled Xerces + the JAXP catalog).
+#   * xsd_to_vocab       — XSD → RDF/OWL Turtle vocabulary (Jena), which feeds
+#                          jena_schemagen for typed views (the "XSD → RDF" path).
+module(
+    name = "rules_xsd",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# java_binary for the validator + vocabulary generator.
+bazel_dep(name = "rules_java", version = "8.15.2")
+
+# The XSD→RDF generator (xsd_to_vocab) builds the ontology with the Jena model
+# API and writes Turtle via RIOT; it links @rules_jena//jena:jena_runtime (full
+# Jena, no protobuf — clash-free). The validator itself is pure JDK (no dep).
+bazel_dep(name = "rules_jena", version = "0.3.2")
+
+# Dev-only: docs/ stardoc + commit-back, and examples.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
+bazel_dep(name = "rules_jsonschema", version = "0.2.0", dev_dependency = True)
