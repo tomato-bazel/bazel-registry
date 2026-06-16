@@ -1,0 +1,105 @@
+module(
+    name = "pinax",
+    version = "0.1.0",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "rules_jvm_external", version = "6.8")
+bazel_dep(name = "rules_java", version = "8.15.2")
+bazel_dep(name = "rules_proto", version = "7.1.0")
+bazel_dep(name = "rules_proto_grpc", version = "5.8.0")
+bazel_dep(name = "rules_proto_grpc_java", version = "5.8.0")
+bazel_dep(name = "rules_shell", version = "0.6.1")
+bazel_dep(name = "protobuf", version = "33.4")
+bazel_dep(name = "googleapis", version = "0.0.0-20260422-20ac242a")
+bazel_dep(name = "googleapis-java", version = "1.1.5")
+
+# Meridian — proto-driven multi-platform UI framework. The Pinax UI
+# (and any future TUI / web client) gets its descriptor renderers
+# from here. Resolved via the premium registry.
+bazel_dep(name = "meridian", version = "0.1.0")
+
+# Google AIP linter (built from source via rules_go) — enforces API style on
+# every commit of the proto contract. Versions match hrcrawl so the two
+# checkouts can share lint behavior.
+bazel_dep(name = "rules_go", version = "0.60.0")
+bazel_dep(name = "gazelle", version = "0.51.0")
+
+go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
+go_sdk.download(version = "1.25.0")
+
+go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
+go_deps.from_file(go_mod = "//tools/api-linter:go.mod")
+use_repo(
+    go_deps,
+    "com_github_googleapis_api_linter_v2",
+)
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    artifacts = [
+        "com.google.code.gson:gson:2.13.1",
+        "com.google.protobuf:protobuf-java:4.33.4",
+        "com.google.protobuf:protobuf-java-util:4.33.4",
+        "junit:junit:4.13.2",
+        "org.apache.beam:beam-runners-direct-java:2.63.0",
+        "org.apache.beam:beam-sdks-java-core:2.63.0",
+        # ProtoCoder lives in this extension; used by RdfConverter to register
+        # coders for pinax.rdf.v1.{EmissionContext,RdfStatement} so the Beam
+        # pipeline can shuffle keyed statement events natively.
+        "org.apache.beam:beam-sdks-java-extensions-protobuf:2.63.0",
+        "org.apache.pdfbox:pdfbox:3.0.4",
+        # gRPC in-process transport (lets the JavaFX UI talk to InspectorService
+        # over a real gRPC channel without opening a socket). API/stub/core/
+        # protobuf are pulled in transitively via rules_proto_grpc_java, but
+        # grpc-inprocess is not, so we request it explicitly at the same
+        # version (1.74.0) to avoid skew.
+        "io.grpc:grpc-inprocess:1.74.0",
+        # picocli: annotation-based CLI for our java_binaries. Used via the
+        # shared PinaxConfigOptions mixin so every binary picks up
+        # --config=PATH and the common overrides with one @Mixin line.
+        "info.picocli:picocli:4.7.6",
+        # beam-sdks-java-extensions-protobuf transitively pulls grpc-xds at
+        # 1.61.0, which is binary-incompatible with our grpc 1.74.0 (the xds
+        # LoadBalancerProvider ServiceLoader entries crash on classpath
+        # startup with IncompatibleClassChangeError). Pin grpc-xds to the
+        # same 1.74.0 to align.
+        "io.grpc:grpc-xds:1.74.0",
+        # Apache Jena: used by DocumentGraphService to build a Model of
+        # extracted parts and serialize it as Turtle. Pinned to 5.2.0 to
+        # match rules_jena's @jena_maven pinning so we can adopt the
+        # toolchain rules (sparql_query_test, rdf_validate_test, etc.)
+        # without version skew when we add SPARQL/SHACL workflows.
+        "org.apache.jena:jena-arq:5.2.0",
+        "org.apache.jena:jena-core:5.2.0",
+        "org.apache.jena:jena-base:5.2.0",
+        "org.apache.jena:jena-iri:5.2.0",
+        # Apache Batik: used to turn PDFBox page-render Graphics2D calls into
+        # SVG. batik-svggen provides SVGGraphics2D; batik-dom provides a
+        # GenericDOMImplementation for the underlying SVG document.
+        "org.apache.xmlgraphics:batik-svggen:1.18",
+        "org.apache.xmlgraphics:batik-dom:1.18",
+        # batik-codec registers PNG/JPEG/TIFF ImageWriter SPIs that
+        # SVGGraphics2D needs to embed raster images inside the generated SVG;
+        # without it, pages containing images fail with an
+        # ImageWriter-is-null NPE during stream().
+        "org.apache.xmlgraphics:batik-codec:1.18",
+        # dotenv-java: loads `.env` into the JVM env at startup so
+        # operators can keep ANTHROPIC_API_KEY (and any other secret /
+        # tuning knob) in a gitignored .env file instead of exporting
+        # in every shell. Consumed by PinaxConfigs.loadDotenv().
+        "io.github.cdimascio:dotenv-java:3.2.0",
+        # JavaFX UI runtime. Classifier jars carry the per-OS native libs.
+        "org.openjfx:javafx-base:21.0.5",
+        "org.openjfx:javafx-graphics:21.0.5",
+        "org.openjfx:javafx-controls:21.0.5",
+        "org.openjfx:javafx-base:jar:mac-aarch64:21.0.5",
+        "org.openjfx:javafx-graphics:jar:mac-aarch64:21.0.5",
+        "org.openjfx:javafx-controls:jar:mac-aarch64:21.0.5",
+    ],
+    known_contributing_modules = ["pinax", "protobuf", "rules_proto_grpc_java"],
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)
+use_repo(maven, "maven")

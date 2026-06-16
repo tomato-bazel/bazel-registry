@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/mattmarshall/pinax",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:mattmarshall/pinax"
+  ],
+  "versions": [
+    "0.1.0"
+  ],
+  "yanked_versions": {}
+}
