@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/mattmarshall/meridian",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:mattmarshall/meridian"
+  ],
+  "versions": [
+    "0.1.0"
+  ],
+  "yanked_versions": {}
+}
