@@ -1,0 +1,40 @@
+# Hermetic eslint runner — lint a workspace's @npm eslint binary under Bazel
+module(
+    name = "rules_eslint",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# The `eslint_test` macro expands to an `sh_test`, so consumers must be able
+# to load `@rules_shell//shell:sh_test.bzl`. A regular (non-dev) dep keeps
+# that load path resolvable from the consumer's module graph.
+bazel_dep(name = "rules_shell", version = "0.6.1")
+
+# Dev-only: stardoc renders docs/.
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
+
+# Dev-only end-to-end smoke: a tiny pnpm workspace with eslint pinned, run
+# through a real `eslint_test` under Bazel. Consumers don't see any of this —
+# they bring their own aspect_rules_js + node toolchain + @npm eslint.
+bazel_dep(name = "aspect_rules_js", version = "3.1.2", dev_dependency = True)
+bazel_dep(name = "rules_nodejs", version = "6.7.4", dev_dependency = True)
+
+node = use_extension(
+    "@rules_nodejs//nodejs:extensions.bzl",
+    "node",
+    dev_dependency = True,
+)
+node.toolchain(node_version = "22.11.0")
+
+npm = use_extension(
+    "@aspect_rules_js//npm:extensions.bzl",
+    "npm",
+    dev_dependency = True,
+)
+npm.npm_translate_lock(
+    name = "smoke_npm",
+    pnpm_lock = "//examples/smoke:pnpm-lock.yaml",
+)
+use_repo(npm, "smoke_npm")
