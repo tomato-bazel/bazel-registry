@@ -1,0 +1,5 @@
+{
+  "integrity": "sha256-U5xh8eJpkO34sK1Gk0j1odFBnToadhanf6v9jgDizMQ=",
+  "strip_prefix": "rules_postgres-0.8.0",
+  "url": "https://github.com/fastverk/rules_postgres/archive/refs/tags/v0.8.0.tar.gz"
+}
