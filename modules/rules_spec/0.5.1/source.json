@@ -1,5 +1,5 @@
 {
-  "integrity": "sha256-EvGTIyZwGTcq3S8y2EH2fCb38JqSPGfZfbE9BFXrnAQ=",
-  "strip_prefix": "rules_spec-0.5.1",
+  "integrity": "sha256-I/6iTimNkvz1ecyJtb/GdRN6FulhkBd0sHbl0k9u/Ao=",
+  "strip_prefix": "spec-0.5.1",
   "url": "https://github.com/fastverk/rules_spec/archive/refs/tags/v0.5.1.tar.gz"
 }
