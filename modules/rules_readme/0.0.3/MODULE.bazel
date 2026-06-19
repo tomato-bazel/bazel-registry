@@ -1,0 +1,12 @@
+module(
+    name = "rules_readme",
+    version = "0.0.3",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
+bazel_dep(name = "rules_markdown", version = "0.0.3")  # from the fastverk registry (see .bazelrc)
+
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
