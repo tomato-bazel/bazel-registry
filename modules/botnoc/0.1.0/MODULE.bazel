@@ -1,0 +1,153 @@
+"""botnoc — the bot-driven NOC for the fastverk constellation.
+
+A Rust + tonic gRPC service suite (org / agent / planning), an axum
+web UI, a meridian-rendered TUI, Lean specs, and the deploy stacks
+(CloudFormation + local docker-compose) that ship them as containers.
+
+Carved out of `fastverk/fastverk` into a standalone module (it had
+previously been consolidated *into* the meta repo; this reverses
+that). Consumed back by the meta repo — if at all — via the standard
+`bazel_dep` + `local_path_override` submodule pattern.
+
+Resolution: the fastverk private bazel-registry (see .bazelrc) plus
+BCR. @meridian / @rules_ssh_tui / @rules_lean / @rules_cloudformation
+all come straight from the registry — no sibling working copies
+needed.
+"""
+
+module(
+    name = "botnoc",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# ─── Rust toolchain + crate universe over the cargo workspace ─────
+# Every services/*, cli/tui, and web BUILD.bazel uses @rules_rust +
+# the @crates repo (crate_universe) to compile the same Cargo
+# workspace members `cargo build --workspace` produces. from_cargo
+# reads the same Cargo.toml + Cargo.lock cargo does.
+bazel_dep(name = "rules_rust", version = "0.70.0")
+bazel_dep(name = "protobuf", version = "33.4")
+
+# Hermetic CC toolchain via zig cc — cross-compiles the service
+# binaries on a Mac to linux/amd64 (ECS Fargate's default arch) for
+# `:<name>-image`. Without it every `bazel build` on a Mac produces a
+# darwin-arm64 binary the linux container can't exec.
+bazel_dep(name = "hermetic_cc_toolchain", version = "4.1.0")
+
+zig_toolchains = use_extension(
+    "@hermetic_cc_toolchain//toolchain:ext.bzl",
+    "toolchains",
+)
+use_repo(zig_toolchains, "zig_sdk")
+
+# glibc pin compatible with distroless/cc-debian12.
+register_toolchains(
+    "@zig_sdk//toolchain:linux_amd64_gnu.2.28",
+    "@zig_sdk//toolchain:linux_arm64_gnu.2.28",
+)
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.95.0"],
+    extra_target_triples = [
+        "x86_64-unknown-linux-gnu",
+        "aarch64-unknown-linux-gnu",
+        # meridian's @meridian//rust/uiview:uiview_wasm_lib needs a
+        # wasm-target rust toolchain (the wasm-bindgen source of the
+        # JS/wasm bundle the web client serves).
+        "wasm32-unknown-unknown",
+    ],
+)
+use_repo(rust, "rust_toolchains")
+register_toolchains("@rust_toolchains//:all")
+
+# `isolate = True` so other modules in the graph (rules_ssh_tui's
+# ssh_tui_crates, etc.) can also declare a crate_universe named
+# `crates` without colliding.
+crate = use_extension(
+    "@rules_rust//crate_universe:extension.bzl",
+    "crate",
+    isolate = True,
+)
+crate.from_cargo(
+    name = "crates",
+    cargo_lockfile = "//:Cargo.lock",
+    manifests = ["//:Cargo.toml"],
+)
+use_repo(crate, "crates")
+
+# ─── OCI image plumbing (services/* + web + cli/tui) ─────────────
+# Each service / web / TUI bundles its rust_binary as an OCI image
+# via //tools/oci:rust_service_image (rules_oci + rules_pkg).
+bazel_dep(name = "rules_oci", version = "2.2.6")
+bazel_dep(name = "rules_pkg", version = "1.0.1")
+bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
+
+# deploy/cfn/BUILD.bazel + tests/contracts_cited load @rules_shell.
+bazel_dep(name = "rules_shell", version = "0.6.1")
+
+# distroless/cc base for every botnoc service image — glibc +
+# ca-certs, nothing else. Namespaced repo name so downstream
+# consumers can pull their own without colliding.
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "botnoc_distroless_cc",
+    digest = "sha256:6714977f9f02632c31377650c15d89a7efaebf43bab0f37c712c30fc01edb973",
+    image = "gcr.io/distroless/cc-debian12",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64/v8",
+    ],
+)
+use_repo(
+    oci,
+    "botnoc_distroless_cc",
+    "botnoc_distroless_cc_linux_amd64",
+    "botnoc_distroless_cc_linux_arm64_v8",
+)
+
+# ─── fastverk-registry modules ───────────────────────────────────
+# meridian: UI framework (uiview wasm bundle + tui lib + panel
+# bundle rule). web + cli/tui consume it; pulled from the registry.
+bazel_dep(name = "meridian", version = "0.2.1")
+
+# cli/tui:botnoc-ssh-image wraps the TUI in an SSH front-end.
+bazel_dep(name = "rules_ssh_tui", version = "0.0.5")
+
+# deploy/cfn: the CloudFormation stack generators (the built JSON in
+# deploy/cfn/built/ is what CI deploys; this is for regeneration).
+bazel_dep(name = "rules_cloudformation", version = "0.7.0")
+
+# lean/Botnoc/ formal specs. rules_lean is registry-resolved, but the
+# Lean targets additionally need the `lake` extension wired to three
+# repo-root Lake files (lean-toolchain, lakefile.lean,
+# lake-manifest.json) — see the rules_lean README. Left unwired here
+# (matching fastverk's own state): the lean source + BUILD ride along
+# but `bazel test //lean:all_green` only resolves once you add those
+# files (`lake update`) and uncomment the block below. Core targets
+# (//services //web //cli) don't touch @lake_deps, so they build
+# regardless.
+bazel_dep(name = "rules_lean", version = "0.3.9")
+# lake = use_extension("@rules_lean//lean:lake.bzl", "lake")
+# lake.workspace(
+#     name = "lake_deps",
+#     lean_toolchain = "//:lean-toolchain",
+#     lakefile = "//:lakefile.lean",
+#     lake_manifest = "//:lake-manifest.json",
+# )
+# use_repo(lake, "lake_deps")
+# register_toolchains("@lake_deps//:lean_toolchain_def")
+
+# ─── local-dev compose stack (deferred) ──────────────────────────
+# deploy/BUILD.bazel.deferred wires the five-service docker-compose
+# convenience target (`bazel run //deploy:up`). rules_docker_compose
+# isn't in the registry, so enabling it needs a submodule:
+#   git submodule add git@github.com:fastverk/rules_docker_compose.git repos/rules_docker_compose
+#   mv deploy/BUILD.bazel.deferred deploy/BUILD.bazel
+# then uncomment:
+# bazel_dep(name = "rules_docker_compose", version = "0.2.6")
+# local_path_override(module_name = "rules_docker_compose", path = "repos/rules_docker_compose")
