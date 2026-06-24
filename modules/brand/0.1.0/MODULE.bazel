@@ -1,0 +1,38 @@
+# brand — the fastverk visual identity: the canonical parametric mark
+# generator (shapely CSG -> svgwrite layers), per-platform icon assets
+# derived from it, and a LaTeX brandbook PDF (rules_tectonic).
+#
+# Hermetic: the generator runs in-build as a py_binary (rules_python + a
+# pip lock pulling shapely/svgwrite wheels), so `bazel build //...`
+# regenerates every SVG, raster, icon, and the brandbook from one source.
+module(
+    name = "brand",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_python", version = "1.7.0")
+bazel_dep(name = "rules_tectonic", version = "0.2.0")
+
+# ─── tectonic (the brandbook PDF) ───────────────────────────────────
+tectonic = use_extension("@rules_tectonic//tectonic:extensions.bzl", "tectonic")
+use_repo(tectonic, "tectonic")
+
+register_toolchains("@tectonic//:tectonic_toolchain_def")
+
+# ─── hermetic Python (the mark generator) ───────────────────────────
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    is_default = True,
+    python_version = "3.12",
+)
+use_repo(python, "python_3_12")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "brand_pip",
+    python_version = "3.12",
+    requirements_lock = "//:requirements.txt",
+)
+use_repo(pip, "brand_pip")
