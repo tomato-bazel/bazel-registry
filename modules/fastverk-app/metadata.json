@@ -1,7 +1,17 @@
 {
   "homepage": "https://github.com/fastverk/fastverk-app",
-  "maintainers": [{ "name": "Matt Marshall", "github": "mattmarshall" }],
-  "repository": ["github:fastverk/fastverk-app"],
-  "versions": ["0.0.1"],
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:fastverk/fastverk-app"
+  ],
+  "versions": [
+    "0.0.1",
+    "0.0.2"
+  ],
   "yanked_versions": {}
 }
