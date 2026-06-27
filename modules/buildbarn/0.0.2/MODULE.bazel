@@ -1,0 +1,30 @@
+"""fastverk/buildbarn — Buildbarn RBE-in-a-box for EKS.
+
+Packages a self-hosted Bazel remote-build-execution + cache cluster (Buildbarn) as a
+reusable, parameterized product:
+  - chart/   a first-class Helm chart for the in-cluster topology (frontend/scheduler/
+             storage/worker/browser), published to ghcr.io/fastverk/charts/buildbarn
+             via the helm CLI (tools/publish-chart.sh) — NOT a Bazel target.
+  - deploy/  the AWS-side CloudFormation: S3 CAS bucket + bb-storage IRSA role + ECR repo
+             (buildbarn-resources), the dedicated rbe-worker managed nodegroup
+             (buildbarn-nodegroup), and an optional turnkey EKS cluster (cluster).
+  - rbe/     the Bazel client wiring a consumer imports (--config=rbe + //platforms:rbe).
+
+This MODULE.bazel scopes ONLY the CloudFormation side (rules_cloudformation deploy
+wrappers); the Helm chart and client config are plain files distributed alongside.
+"""
+
+module(
+    name = "buildbarn",
+    version = "0.0.1",
+)
+
+# rules_cloudformation (fastverk registry): cloudformation_up / cloudformation_down are
+# `bazel run`-able wrappers around `aws cloudformation deploy` / delete-stack. The deploy/
+# stacks are hand-authored YAML (Conditions/Mappings the typed aggregator can't express).
+bazel_dep(name = "rules_cloudformation", version = "0.7.1")
+
+# sh_binary for any launcher targets (native.sh_binary is being removed).
+bazel_dep(name = "rules_shell", version = "0.6.1")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "platforms", version = "1.0.0")
