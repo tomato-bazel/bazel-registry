@@ -12,6 +12,7 @@ rust_binary(
         "src/audit.rs",
         "src/bump.rs",
         "src/common.rs",
+        "src/deps.rs",
         "src/main.rs",
         "src/matrix.rs",
         "src/mcp.rs",
