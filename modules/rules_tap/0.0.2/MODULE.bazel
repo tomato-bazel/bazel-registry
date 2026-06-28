@@ -1,0 +1,23 @@
+# Bazel rules + prebuilt CLI for tap — change-based test selection, target-graph impact, flake
+# tracking, culprit-finding for SAVVI Bazel workspaces.
+#
+# PUBLIC rules layer only. The tap engine/server/proto source stays private in fastverk/tap; the
+# `tap` CLI arrives as a prebuilt, per-arch binary fetched from THIS repo's GitHub release assets
+# (see //:cli.bzl). Consumers resolve rules_tap anonymously, with no private-source access — the
+# same split rules_lang uses for the polyglot atlas oleans.
+module(
+    name = "rules_tap",
+    version = "0.0.2",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# Dev-only.
+bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
+
+# Per-arch prebuilt `tap` CLI, fetched from this repo's GitHub releases (built + uploaded by the
+# private fastverk/tap repo's publish-tap-cli workflow).
+tap_cli = use_extension("//:cli.bzl", "tap_cli")
+use_repo(tap_cli, "tap_cli_linux_x86_64", "tap_cli_darwin_arm64")
