@@ -1,0 +1,23 @@
+# rules_fastverk — the fastverk foundation module.
+#
+# Three things, on the "how to build one target / one repo" axis (the sibling of
+# rules_ci's project-orchestration axis — `fastverk_project` lives there):
+#   1. fastverk_* convention macros (fastverk_mdbook today; fastverk_rust_library
+#      etc. to follow) — //fastverk:defs.bzl.
+#   2. the canonical dependency BOM (//bom/versions.json) — the source of truth
+#      the `rels deps` ratchet audits every repo's MODULE.bazel against.
+#   3. the shared .bazelrc snippet (//bazelrc/common.bazelrc) — try-import'd so
+#      the registry chain + flags stop drifting.
+#
+# It deps only what its macros need (kept light); the BOM is a manifest, NOT
+# transitive bazel_deps, so consuming rules_fastverk doesn't drag the whole
+# constellation into a consumer's graph.
+module(
+    name = "rules_fastverk",
+    version = "0.0.2",
+)
+
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+# fastverk_mdbook wraps rules_mdbook + stages the @brand mdBook theme.
+bazel_dep(name = "rules_mdbook", version = "0.3.1")
+bazel_dep(name = "brand", version = "0.2.0")
