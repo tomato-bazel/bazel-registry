@@ -44,6 +44,7 @@ use clap::{Parser, Subcommand};
 mod audit;
 mod bump;
 mod common;
+mod deps;
 mod matrix;
 mod mcp;
 mod release;
@@ -87,6 +88,11 @@ enum Command {
     /// MODULE.bazel references the named module.
     Bump(bump::Args),
 
+    /// The dependency ratchet: audit every repo's MODULE.bazel against
+    /// the canonical BOM (rules_fastverk//bom/versions.json), and with
+    /// --write bump each drifting pin up to it.
+    Deps(deps::Args),
+
     /// Emit a Markdown status table of every registered module.
     Matrix(matrix::Args),
 
@@ -107,6 +113,7 @@ fn main() -> Result<()> {
         Command::Release(args) => release::run(&env, args),
         Command::Audit(args) => audit::run(&env, args),
         Command::Bump(args) => bump::run(&env, args),
+        Command::Deps(args) => deps::run(&env, args),
         Command::Matrix(args) => matrix::run(&env, args),
         Command::Mcp(cmd) => mcp::run(&env, cmd),
         Command::Scaffold(args) => scaffold::run(&env, args),
