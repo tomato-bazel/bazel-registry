@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/brand",
+  "homepage": "https://github.com/fastverk/rules_fastverk",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,12 +7,10 @@
     }
   ],
   "repository": [
-    "github:fastverk/brand"
+    "github:fastverk/rules_fastverk"
   ],
   "versions": [
-    "0.1.0",
-    "0.2.0",
-    "0.3.0"
+    "0.0.1"
   ],
   "yanked_versions": {}
 }
