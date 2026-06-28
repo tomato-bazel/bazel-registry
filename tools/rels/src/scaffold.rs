@@ -194,7 +194,7 @@ MODULE.bazel.lock
 const BAZELRC: &str = "\
 common --enable_bzlmod
 
-common --registry=https://raw.githubusercontent.com/fastverk/bazel-registry/main/
+common --registry=https://registry.fastverk.com/
 common --registry=https://bcr.bazel.build/
 
 test --test_output=errors
@@ -310,7 +310,7 @@ fn readme(args: &Args) -> String {
          `.bazelrc`:\n\
          \n\
          ```\n\
-         common --registry=https://raw.githubusercontent.com/fastverk/bazel-registry/main/\n\
+         common --registry=https://registry.fastverk.com/\n\
          common --registry=https://bcr.bazel.build/\n\
          ```\n\
          \n\

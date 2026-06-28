@@ -80,7 +80,7 @@ rules in tools/readme/categorization_rules.json.
 Add the registry chain to your consumer's .bazelrc:
 
 ```
-common --registry=https://raw.githubusercontent.com/fastverk/bazel-registry/main/
+common --registry=https://registry.fastverk.com/
 common --registry=https://bcr.bazel.build/
 ```
 
