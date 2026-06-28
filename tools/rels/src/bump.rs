@@ -195,7 +195,7 @@ fn scan_workspaces(env: &Env, module: &str, to_version: &str) -> Result<Vec<Edit
 /// `module` with `to_version`. Returns the rewritten content, the
 /// old version, and whether the dep was marked `dev_dependency`.
 /// Returns None if no matching `bazel_dep` is present.
-fn rewrite_dep(content: &str, module: &str, to_version: &str) -> Option<(String, String, bool)> {
+pub(crate) fn rewrite_dep(content: &str, module: &str, to_version: &str) -> Option<(String, String, bool)> {
     // Pattern: bazel_dep(...) where the `...` contains a name match
     // and a version pin we can rewrite. We match the whole call so
     // multi-line forms still work. Non-greedy `[^)]*?` keeps us
