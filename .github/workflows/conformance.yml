@@ -27,11 +27,17 @@ jobs:
       - name: Mint App token — tomato-bazel
         id: tok_tomato
         uses: actions/create-github-app-token@v2
-        with: { app-id: ${{ secrets.FASTVERK_APP_ID }}, private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}, owner: tomato-bazel }
+        with:
+          app-id: ${{ secrets.FASTVERK_APP_ID }}
+          private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}
+          owner: tomato-bazel
       - name: Mint App token — fastverk
         id: tok_fastverk
         uses: actions/create-github-app-token@v2
-        with: { app-id: ${{ secrets.FASTVERK_APP_ID }}, private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}, owner: fastverk }
+        with:
+          app-id: ${{ secrets.FASTVERK_APP_ID }}
+          private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}
+          owner: fastverk
 
       - uses: actions/checkout@v4
       - run: pip install pyshacl
