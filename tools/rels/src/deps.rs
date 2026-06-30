@@ -1,7 +1,7 @@
 //! `rels deps` — the dependency ratchet.
 //!
 //! Audits every sibling repo's `MODULE.bazel` against the canonical BOM
-//! (`rules_fastverk//bom/versions.json`) and, with `--write`, bumps each
+//! (`rules_tomato//bom/versions.json`) and, with `--write`, bumps each
 //! drifting `bazel_dep` to the BOM version. This is how ~60 polyrepo modules
 //! stay in sync without a monorepo: one source of truth, floor-first.
 //!
@@ -37,7 +37,7 @@ pub struct Args {
     #[arg(long)]
     pub no_test: bool,
 
-    /// Override the BOM path (default: <rules_fastverk checkout>/bom/versions.json).
+    /// Override the BOM path (default: <rules_tomato checkout>/bom/versions.json).
     #[arg(long)]
     pub bom: Option<PathBuf>,
 }
@@ -219,13 +219,13 @@ fn load_bom(env: &Env, override_path: Option<&Path>) -> Result<BTreeMap<String, 
     let path = match override_path {
         Some(p) => p.to_path_buf(),
         None => env
-            .checkout_path("rules_fastverk")
+            .checkout_path("rules_tomato")
             .join("bom")
             .join("versions.json"),
     };
     let raw = fs::read_to_string(&path).with_context(|| {
         format!(
-            "read BOM {} (is rules_fastverk checked out? else pass --bom)",
+            "read BOM {} (is rules_tomato checked out? else pass --bom)",
             path.display()
         )
     })?;

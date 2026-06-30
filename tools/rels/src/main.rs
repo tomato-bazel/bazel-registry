@@ -89,7 +89,7 @@ enum Command {
     Bump(bump::Args),
 
     /// The dependency ratchet: audit every repo's MODULE.bazel against
-    /// the canonical BOM (rules_fastverk//bom/versions.json), and with
+    /// the canonical BOM (rules_tomato//bom/versions.json), and with
     /// --write bump each drifting pin up to it.
     Deps(deps::Args),
 
