@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/meridian-ux/meridian-uiview-core",
+  "homepage": "https://github.com/meridian-ux/meridian-tui",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,11 +7,10 @@
     }
   ],
   "repository": [
-    "github:meridian-ux/meridian-uiview-core"
+    "github:meridian-ux/meridian-tui"
   ],
   "versions": [
-    "0.1.0",
-    "0.1.1"
+    "0.1.0"
   ],
   "yanked_versions": {}
 }
