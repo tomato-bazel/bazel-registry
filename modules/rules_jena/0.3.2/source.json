@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-DExmQ0CzGv67BnxG+KRckCd618MrFDuXLCrLCv/Bbw0=",
   "strip_prefix": "rules_jena-0.3.2",
-  "url": "https://github.com/fastverk/rules_jena/archive/refs/tags/v0.3.2.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_jena/archive/refs/tags/v0.3.2.tar.gz"
 }

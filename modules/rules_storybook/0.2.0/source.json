@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-9KIdIOWiniS5KEkVMw2/cvnvnXzG+ryOccpq393/d78=",
   "strip_prefix": "rules_storybook-0.2.0",
-  "url": "https://github.com/fastverk/rules_storybook/archive/refs/tags/v0.2.0.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_storybook/archive/refs/tags/v0.2.0.tar.gz"
 }

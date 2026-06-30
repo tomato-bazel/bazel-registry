@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-WTnf8xHoZ+phd6MjRTvdtYgWIydx4RuvjYbo9kv97dk=",
   "strip_prefix": "rules_agentic_ide-0.0.1",
-  "url": "https://github.com/fastverk/rules_agentic_ide/archive/refs/tags/v0.0.1.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_agentic_ide/archive/refs/tags/v0.0.1.tar.gz"
 }

@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_huggingface",
+  "homepage": "https://github.com/tomato-bazel/rules_huggingface",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_huggingface"
+    "github:tomato-bazel/rules_huggingface"
   ],
   "versions": [
     "0.0.3"

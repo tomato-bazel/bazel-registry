@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_web",
+  "homepage": "https://github.com/tomato-bazel/rules_web",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_web"
+    "github:tomato-bazel/rules_web"
   ],
   "versions": [
     "0.0.1"

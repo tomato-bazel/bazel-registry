@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_openapi",
+  "homepage": "https://github.com/tomato-bazel/rules_openapi",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_openapi"
+    "github:tomato-bazel/rules_openapi"
   ],
   "versions": [
     "0.1.0",

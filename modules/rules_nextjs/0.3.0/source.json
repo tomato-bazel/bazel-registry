@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-rd7BcyuPLWrq3o3dMYTIW9be62s2T4nlQl8jtBdXsQU=",
   "strip_prefix": "rules_nextjs-0.3.0",
-  "url": "https://github.com/fastverk/rules_nextjs/archive/refs/tags/v0.3.0.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_nextjs/archive/refs/tags/v0.3.0.tar.gz"
 }

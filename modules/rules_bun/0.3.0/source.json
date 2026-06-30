@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-X0vFlHNWGLiDKYzU5SDNv9SKIVs8WFJ6ZJ+20+WvZfA=",
   "strip_prefix": "rules_bun-0.3.0",
-  "url": "https://github.com/fastverk/rules_bun/archive/refs/tags/v0.3.0.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_bun/archive/refs/tags/v0.3.0.tar.gz"
 }

@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-6e4y8u24DX4TMk85McWaK6QEeMtXl1c8fYlpaeLs9iY=",
   "strip_prefix": "rules_markdown-0.0.3",
-  "url": "https://github.com/fastverk/rules_markdown/archive/refs/tags/v0.0.3.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_markdown/archive/refs/tags/v0.0.3.tar.gz"
 }

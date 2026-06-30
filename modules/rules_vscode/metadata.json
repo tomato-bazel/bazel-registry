@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_vscode",
+  "homepage": "https://github.com/tomato-bazel/rules_vscode",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_vscode"
+    "github:tomato-bazel/rules_vscode"
   ],
   "versions": [
     "0.0.2"

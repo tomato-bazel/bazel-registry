@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_helm",
+  "homepage": "https://github.com/tomato-bazel/rules_helm",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_helm"
+    "github:tomato-bazel/rules_helm"
   ],
   "versions": [
     "0.1.0"

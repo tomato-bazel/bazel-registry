@@ -1,6 +1,6 @@
 {
   "integrity": "sha256-97hOpofaBjHuCQNM+IbpSqzCCP48gSYcKK6RJhJP7eM=",
   "strip_prefix": "rules_ssh_tui-0.0.5",
-  "url": "https://codeload.github.com/fastverk/rules_ssh_tui/tar.gz/refs/tags/v0.0.5",
+  "url": "https://codeload.github.com/tomato-bazel/rules_ssh_tui/tar.gz/refs/tags/v0.0.5",
   "archive_type": "tar.gz"
 }

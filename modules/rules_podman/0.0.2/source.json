@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-lJpk4PCDHQgcZM5zjUySy/DG0Y3JV7R9trR5DKZohmE=",
   "strip_prefix": "rules_podman-0.0.2",
-  "url": "https://github.com/fastverk/rules_podman/archive/refs/tags/v0.0.2.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_podman/archive/refs/tags/v0.0.2.tar.gz"
 }

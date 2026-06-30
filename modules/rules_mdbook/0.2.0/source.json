@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-EgLwuw7ECusp3KODng/iqQLnaQYa1eQg6oul43Yw60U=",
   "strip_prefix": "rules_mdbook-0.2.0",
-  "url": "https://github.com/fastverk/rules_mdbook/archive/refs/tags/v0.2.0.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_mdbook/archive/refs/tags/v0.2.0.tar.gz"
 }

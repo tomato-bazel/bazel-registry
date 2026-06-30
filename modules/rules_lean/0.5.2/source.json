@@ -1,5 +1,5 @@
 {
     "integrity": "sha256-mYkyTxH7zEWTee6uRbH3crkyi32xCx6ZzB8fW7OO+9M=",
     "strip_prefix": "rules_lean-0.5.2",
-    "url": "https://github.com/fastverk/rules_lean/archive/refs/tags/v0.5.2.tar.gz"
+    "url": "https://github.com/tomato-bazel/rules_lean/archive/refs/tags/v0.5.2.tar.gz"
 }

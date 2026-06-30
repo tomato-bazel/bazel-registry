@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-vlPl/TGBHaNF+cbwr0NjDRakMCFK1JfdWBNnmThgb8o=",
   "strip_prefix": "rules_uv-0.7.4",
-  "url": "https://github.com/fastverk/rules_uv/archive/refs/tags/v0.7.4.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_uv/archive/refs/tags/v0.7.4.tar.gz"
 }

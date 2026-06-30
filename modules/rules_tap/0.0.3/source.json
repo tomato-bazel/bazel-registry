@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-KK2zZ7dYBjba32T5p3gEOMfEY6RCxN/oppRpp/8j9t8=",
   "strip_prefix": "rules_tap-0.0.3",
-  "url": "https://github.com/fastverk/rules_tap/archive/refs/tags/v0.0.3.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_tap/archive/refs/tags/v0.0.3.tar.gz"
 }

@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-K5vjMS86CAPMy+/kwS2ht9HCfCrG2lSToEmXbq6SyrU=",
   "strip_prefix": "rules_meson-0.0.0",
-  "url": "https://github.com/fastverk/rules_meson/archive/refs/tags/v0.0.0.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_meson/archive/refs/tags/v0.0.0.tar.gz"
 }

@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-0YVJDVczBTSmEuaH7xSInwervHnwJe5JwM3IaHwk0EQ=",
   "strip_prefix": "rules_lora-0.0.14",
-  "url": "https://github.com/fastverk/rules_lora/archive/refs/tags/v0.0.14.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_lora/archive/refs/tags/v0.0.14.tar.gz"
 }

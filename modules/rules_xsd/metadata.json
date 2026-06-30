@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_xsd",
+  "homepage": "https://github.com/tomato-bazel/rules_xsd",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_xsd"
+    "github:tomato-bazel/rules_xsd"
   ],
   "versions": [
     "0.0.1"

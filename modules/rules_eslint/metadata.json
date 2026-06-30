@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_eslint",
+  "homepage": "https://github.com/tomato-bazel/rules_eslint",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_eslint"
+    "github:tomato-bazel/rules_eslint"
   ],
   "versions": [
     "0.1.0"

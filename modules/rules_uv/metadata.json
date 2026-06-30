@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_uv",
+  "homepage": "https://github.com/tomato-bazel/rules_uv",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_uv"
+    "github:tomato-bazel/rules_uv"
   ],
   "versions": [
     "0.1.0",

@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_bibtex",
+  "homepage": "https://github.com/tomato-bazel/rules_bibtex",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_bibtex"
+    "github:tomato-bazel/rules_bibtex"
   ],
   "versions": [
     "0.0.1",

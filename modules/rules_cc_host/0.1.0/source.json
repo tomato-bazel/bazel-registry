@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-MX8Aa1UKikRrFP6Usk4ZCHmLFnt3svNfRyNTiFI0mvo=",
   "strip_prefix": "rules_cc_host-0.1.0",
-  "url": "https://github.com/fastverk/rules_cc_host/archive/refs/tags/v0.1.0.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_cc_host/archive/refs/tags/v0.1.0.tar.gz"
 }

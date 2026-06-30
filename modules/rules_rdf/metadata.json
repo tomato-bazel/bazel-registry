@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_rdf",
+  "homepage": "https://github.com/tomato-bazel/rules_rdf",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_rdf"
+    "github:tomato-bazel/rules_rdf"
   ],
   "versions": [
     "0.0.1",

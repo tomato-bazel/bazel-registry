@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-UJlqPcfFhd58H81uGk2rMUojivte3kAghNncnrbr+9U=",
   "strip_prefix": "rules_web-0.0.1",
-  "url": "https://github.com/fastverk/rules_web/archive/refs/tags/v0.0.1.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_web/archive/refs/tags/v0.0.1.tar.gz"
 }

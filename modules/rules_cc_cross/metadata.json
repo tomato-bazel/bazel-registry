@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_cc_cross",
+  "homepage": "https://github.com/tomato-bazel/rules_cc_cross",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_cc_cross"
+    "github:tomato-bazel/rules_cc_cross"
   ],
   "versions": [
     "0.1.0"

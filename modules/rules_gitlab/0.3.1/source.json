@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-1vfhKl6+EyBaF+gcrzzGHS9pLQgbgP2/ZX3WUXzkupc=",
   "strip_prefix": "rules_gitlab-0.3.1",
-  "url": "https://github.com/fastverk/rules_gitlab/archive/refs/tags/v0.3.1.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_gitlab/archive/refs/tags/v0.3.1.tar.gz"
 }

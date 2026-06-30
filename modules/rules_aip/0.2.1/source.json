@@ -1,5 +1,5 @@
 {
   "integrity": "sha256-AlKUIidRlq2+BG2eTlZVO5p5KydSBV8uhf82rAkGEOE=",
   "strip_prefix": "rules_aip-0.2.1",
-  "url": "https://github.com/fastverk/rules_aip/archive/refs/tags/v0.2.1.tar.gz"
+  "url": "https://github.com/tomato-bazel/rules_aip/archive/refs/tags/v0.2.1.tar.gz"
 }

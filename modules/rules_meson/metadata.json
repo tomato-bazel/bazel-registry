@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.com/fastverk/rules_meson",
+  "homepage": "https://github.com/tomato-bazel/rules_meson",
   "maintainers": [
     {
       "name": "Matt Marshall",
@@ -7,7 +7,7 @@
     }
   ],
   "repository": [
-    "github:fastverk/rules_meson"
+    "github:tomato-bazel/rules_meson"
   ],
   "versions": [
     "0.0.0",
