@@ -1,13 +1,14 @@
-# Dependency ratchet for the tomato-bazel distro.
-# Audits every org repo's MODULE.bazel against the canonical BOM
-# (rules_tomato//bom/versions.json) and opens a per-repo PR to bump any pin that
-# is BEHIND the BOM. Forward-only: repos AHEAD are reported, never downgraded.
+# Dependency ratchet across the constellation (tomato-bazel + fastverk).
+# Audits every repo's MODULE.bazel against the canonical BOM
+# (rules_tomato//bom/versions.json) and opens a forward-only per-repo bump PR for
+# any pin BEHIND it. Repos AHEAD are reported, never downgraded. This is the
+# cross-org alignment gate; fastverk/agent et al. ratchet against the same BOM.
 #
-# `workflow_dispatch` runs the full --write + PR flow; the same `rels deps` audit
-# can also be wired as a required PR check (see conformance/README) so drift can't
-# merge in the first place.
+# Layout note: rels discovers sibling checkouts under the registry root's parent,
+# so bazel-registry is checked out into a subdir and the repos are cloned as its
+# siblings under $GITHUB_WORKSPACE.
 #
-# Auth: the fastverk App (org secrets FASTVERK_APP_ID / FASTVERK_APP_PRIVATE_KEY).
+# Auth: the fastverk App installed on BOTH orgs (one token per org).
 name: dep-ratchet
 
 on:
@@ -22,54 +23,60 @@ jobs:
   ratchet:
     runs-on: ubuntu-latest
     steps:
-      - name: Mint fastverk App token (org-scoped)
-        id: app
+      - name: Mint App token — tomato-bazel
+        id: tok_tomato
         uses: actions/create-github-app-token@v2
-        with:
-          app-id: ${{ secrets.FASTVERK_APP_ID }}
-          private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}
-          owner: tomato-bazel
+        with: { app-id: ${{ secrets.FASTVERK_APP_ID }}, private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}, owner: tomato-bazel }
+      - name: Mint App token — fastverk
+        id: tok_fastverk
+        uses: actions/create-github-app-token@v2
+        with: { app-id: ${{ secrets.FASTVERK_APP_ID }}, private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}, owner: fastverk }
 
       - name: Checkout bazel-registry (rels lives here)
         uses: actions/checkout@v4
-
+        with: { path: bazel-registry }
       - uses: dtolnay/rust-toolchain@stable
       - name: Build rels
-        run: cargo build --release --manifest-path tools/rels/Cargo.toml
+        run: cargo build --release --manifest-path bazel-registry/tools/rels/Cargo.toml
 
-      - name: Clone the BOM + every org repo (siblings, so rels finds them)
+      - name: Clone the BOM + both orgs as siblings
         env:
-          GH_TOKEN: ${{ steps.app.outputs.token }}
+          TOK_tomato_bazel: ${{ steps.tok_tomato.outputs.token }}
+          TOK_fastverk: ${{ steps.tok_fastverk.outputs.token }}
         run: |
-          mkdir -p repos && cd repos
-          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/tomato-bazel/rules_tomato" rules_tomato
-          gh repo list tomato-bazel --limit 300 --json name --jq '.[].name' | while read -r r; do
-            [ "$r" = rules_tomato ] && continue
-            git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/tomato-bazel/$r" "$r" 2>/dev/null || true
+          : > orgmap.txt
+          for org in tomato-bazel fastverk; do
+            key="TOK_${org//-/_}"; tok="${!key}"
+            GH_TOKEN="$tok" gh repo list "$org" --limit 400 --json name --jq '.[].name' | while read -r r; do
+              [ -d "$r" ] && continue
+              git clone --depth 1 "https://x-access-token:${tok}@github.com/$org/$r" "$r" 2>/dev/null \
+                && echo "$r $org" >> orgmap.txt || true
+            done
           done
 
-      - name: Audit (always) + apply bumps
-        id: ratchet
+      - name: Audit + apply forward-only bumps
         run: |
-          BOM="$PWD/repos/rules_tomato/bom/versions.json"
-          # audit is the gate signal; --write applies the forward-only bumps in place.
-          ./tools/rels/target/release/rels deps --bom "$BOM" || true
-          ./tools/rels/target/release/rels deps --bom "$BOM" --write --no-test || true
+          BOM="$PWD/rules_tomato/bom/versions.json"
+          REL=bazel-registry/tools/rels/target/release/rels
+          "$REL" deps --bom "$BOM" || true          # audit (the gate signal)
+          "$REL" deps --bom "$BOM" --write --no-test || true
 
-      - name: Open a PR per bumped repo
+      - name: Open a bump PR per behind repo (in its own org)
         env:
-          GH_TOKEN: ${{ steps.app.outputs.token }}
+          TOK_tomato_bazel: ${{ steps.tok_tomato.outputs.token }}
+          TOK_fastverk: ${{ steps.tok_fastverk.outputs.token }}
         run: |
           BR="ratchet/bom-$(date +%Y%m%d)"
-          for d in repos/*/; do
-            r=$(basename "$d"); [ "$r" = rules_tomato ] && continue
-            git -C "$d" diff --quiet -- MODULE.bazel && continue
-            git -C "$d" config user.name  "tomato-bazel[bot]"
-            git -C "$d" config user.email "tomato-bazel[bot]@users.noreply.github.com"
-            git -C "$d" checkout -b "$BR"
-            git -C "$d" commit -q -am "deps: ratchet MODULE.bazel pins up to the rules_tomato BOM"
-            git -C "$d" push -q "https://x-access-token:${GH_TOKEN}@github.com/tomato-bazel/$r" "$BR"
-            GH_TOKEN="$GH_TOKEN" gh pr create --repo "tomato-bazel/$r" --head "$BR" \
+          while read -r r org; do
+            [ "$r" = rules_tomato ] && continue
+            git -C "$r" diff --quiet -- MODULE.bazel && continue
+            key="TOK_${org//-/_}"; tok="${!key}"
+            git -C "$r" config user.name  "tomato-bazel[bot]"
+            git -C "$r" config user.email "tomato-bazel[bot]@users.noreply.github.com"
+            git -C "$r" checkout -b "$BR"
+            git -C "$r" commit -q -am "deps: ratchet MODULE.bazel pins up to the rules_tomato BOM"
+            git -C "$r" push -q "https://x-access-token:${tok}@github.com/$org/$r" "$BR" || continue
+            GH_TOKEN="$tok" gh pr create --repo "$org/$r" --head "$BR" \
               --title "deps: ratchet to the rules_tomato BOM" \
-              --body "Automated forward-only dependency bump to the canonical BOM (rules_tomato//bom/versions.json). Merges only after this repo's CI is green." || true
-          done
+              --body "Automated forward-only bump to the canonical BOM (rules_tomato//bom/versions.json). Merges only after this repo's CI is green." || true
+          done < orgmap.txt

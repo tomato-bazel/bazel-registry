@@ -1,0 +1,63 @@
+# Convention conformance gate across the constellation.
+# Projects every repo's MODULE.bazel + layout to RDF (tools/graph/graph.py) and
+# validates it against the SHACL convention contract
+# (rules_tomato//conventions/conventions.shacl.ttl).
+#
+# Runs ADVISORY for now (reports violations to the job summary, does not fail) —
+# most modules still lack docs/examples/CHANGELOG. Flip `continue-on-error` off
+# (and/or tighten the shape) once conventions are backfilled to make it a hard gate.
+# (The bazel-native equivalent is rules_jena's SHACL validator over the same
+# ecosystem.ttl; pyshacl keeps the CI lightweight.)
+#
+# Auth: the fastverk App on both orgs.
+name: conformance
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"      # weekly, Monday 08:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  shacl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint App token — tomato-bazel
+        id: tok_tomato
+        uses: actions/create-github-app-token@v2
+        with: { app-id: ${{ secrets.FASTVERK_APP_ID }}, private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}, owner: tomato-bazel }
+      - name: Mint App token — fastverk
+        id: tok_fastverk
+        uses: actions/create-github-app-token@v2
+        with: { app-id: ${{ secrets.FASTVERK_APP_ID }}, private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}, owner: fastverk }
+
+      - uses: actions/checkout@v4
+      - run: pip install pyshacl
+
+      - name: Clone the constellation + the convention shape
+        env:
+          TOK_tomato_bazel: ${{ steps.tok_tomato.outputs.token }}
+          TOK_fastverk: ${{ steps.tok_fastverk.outputs.token }}
+        run: |
+          mkdir -p _repos
+          git clone --depth 1 "https://x-access-token:${TOK_tomato_bazel}@github.com/tomato-bazel/rules_tomato" _repos/rules_tomato
+          for org in tomato-bazel fastverk; do
+            key="TOK_${org//-/_}"; tok="${!key}"
+            GH_TOKEN="$tok" gh repo list "$org" --limit 400 --json name --jq '.[].name' | while read -r r; do
+              [ -d "_repos/$r" ] && continue
+              git clone --depth 1 "https://x-access-token:${tok}@github.com/$org/$r" "_repos/$r" 2>/dev/null || true
+            done
+          done
+
+      - name: Project to RDF + validate
+        continue-on-error: true   # ADVISORY — flip off to enforce after backfill
+        run: |
+          mkdir -p _out
+          python3 tools/graph/graph.py --repos-root _repos --out _out --title constellation
+          echo '## SHACL conformance (advisory)' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          pyshacl -s _repos/rules_tomato/conventions/conventions.shacl.ttl -f human _out/ecosystem.ttl \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

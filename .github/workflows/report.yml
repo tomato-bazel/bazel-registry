@@ -1,10 +1,10 @@
-# Periodic consolidated-graph + consistency report for the tomato-bazel distro.
-# Regenerates the dependency graph (SVG) + drift/convention report on a schedule
-# and publishes them to GitHub Pages — the auto-refreshing "health dashboard".
+# Periodic consolidated-graph + consistency report across the constellation.
+# Spans BOTH orgs — tomato-bazel (the Bazel distro) and fastverk (products +
+# services, incl. fastverk/agent) — so the dependency graph + drift/convention
+# report is the cross-org view. Publishes to GitHub Pages (the health dashboard).
 #
-# Auth: the fastverk GitHub App (installed on the tomato-bazel org) mints a
-# short-lived installation token so this job can enumerate + clone every org repo.
-# Required org secrets (set when installing the App):
+# Auth: the fastverk GitHub App, installed on BOTH orgs. One installation token
+# per org (minted per `owner:`). Required org secrets (set on the repo's org):
 #   FASTVERK_APP_ID            — the App's numeric id
 #   FASTVERK_APP_PRIVATE_KEY   — the App's PEM private key
 name: ecosystem-report
@@ -23,38 +23,48 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-      - name: Mint fastverk App token (org-scoped)
-        id: app
+      - name: Mint App token — tomato-bazel
+        id: tok_tomato
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ secrets.FASTVERK_APP_ID }}
           private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}
           owner: tomato-bazel
+      - name: Mint App token — fastverk
+        id: tok_fastverk
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.FASTVERK_APP_ID }}
+          private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}
+          owner: fastverk
 
       - name: Checkout bazel-registry (has tools/graph)
         uses: actions/checkout@v4
-
       - name: Tooling
         run: sudo apt-get update && sudo apt-get install -y graphviz
 
-      - name: Clone every tomato-bazel repo (shallow)
+      - name: Clone the constellation (both orgs)
         env:
-          GH_TOKEN: ${{ steps.app.outputs.token }}
+          TOK_tomato_bazel: ${{ steps.tok_tomato.outputs.token }}
+          TOK_fastverk: ${{ steps.tok_fastverk.outputs.token }}
         run: |
           mkdir -p _repos
-          gh repo list tomato-bazel --limit 300 --json name --jq '.[].name' | while read -r r; do
-            git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/tomato-bazel/$r" "_repos/$r" 2>/dev/null || true
+          for org in tomato-bazel fastverk; do
+            key="TOK_${org//-/_}"; tok="${!key}"
+            GH_TOKEN="$tok" gh repo list "$org" --limit 400 --json name --jq '.[].name' | while read -r r; do
+              [ -d "_repos/$r" ] && continue   # dedup (repo names are unique across the constellation)
+              git clone --depth 1 "https://x-access-token:${tok}@github.com/$org/$r" "_repos/$r" 2>/dev/null || true
+            done
           done
 
       - name: Generate report + graph
         run: |
           mkdir -p _site
-          python3 tools/graph/graph.py --repos-root _repos --out _site --title "tomato-bazel"
+          python3 tools/graph/graph.py --repos-root _repos --out _site --title "fastverk + tomato-bazel"
           dot -Tsvg _site/graph.dot -o _site/graph.svg
-          # Minimal index that shows the graph + the report inline.
           {
-            echo '<!doctype html><meta charset=utf-8><title>tomato-bazel health</title>'
-            echo '<body style="background:#15161A;color:#ECE7DA;font-family:system-ui;max-width:1000px;margin:2rem auto">'
+            echo '<!doctype html><meta charset=utf-8><title>constellation health</title>'
+            echo '<body style="background:#15161A;color:#ECE7DA;font-family:system-ui;max-width:1100px;margin:2rem auto">'
             echo '<img src="graph.svg" style="width:100%"><hr>'
             echo '<pre style="white-space:pre-wrap">'; sed 's/&/\&amp;/g;s/</\&lt;/g' _site/report.md; echo '</pre>'
           } > _site/index.html
