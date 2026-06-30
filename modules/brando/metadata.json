@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/mattmarshall/brando",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:mattmarshall/brando"
+  ],
+  "versions": [
+    "0.0.1"
+  ],
+  "yanked_versions": {}
+}
