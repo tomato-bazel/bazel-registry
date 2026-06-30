@@ -1,0 +1,65 @@
+# Periodic consolidated-graph + consistency report for the tomato-bazel distro.
+# Regenerates the dependency graph (SVG) + drift/convention report on a schedule
+# and publishes them to GitHub Pages — the auto-refreshing "health dashboard".
+#
+# Auth: the fastverk GitHub App (installed on the tomato-bazel org) mints a
+# short-lived installation token so this job can enumerate + clone every org repo.
+# Required org secrets (set when installing the App):
+#   FASTVERK_APP_ID            — the App's numeric id
+#   FASTVERK_APP_PRIVATE_KEY   — the App's PEM private key
+name: ecosystem-report
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"      # weekly, Monday 07:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint fastverk App token (org-scoped)
+        id: app
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.FASTVERK_APP_ID }}
+          private-key: ${{ secrets.FASTVERK_APP_PRIVATE_KEY }}
+          owner: tomato-bazel
+
+      - name: Checkout bazel-registry (has tools/graph)
+        uses: actions/checkout@v4
+
+      - name: Tooling
+        run: sudo apt-get update && sudo apt-get install -y graphviz
+
+      - name: Clone every tomato-bazel repo (shallow)
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          mkdir -p _repos
+          gh repo list tomato-bazel --limit 300 --json name --jq '.[].name' | while read -r r; do
+            git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/tomato-bazel/$r" "_repos/$r" 2>/dev/null || true
+          done
+
+      - name: Generate report + graph
+        run: |
+          mkdir -p _site
+          python3 tools/graph/graph.py --repos-root _repos --out _site --title "tomato-bazel"
+          dot -Tsvg _site/graph.dot -o _site/graph.svg
+          # Minimal index that shows the graph + the report inline.
+          {
+            echo '<!doctype html><meta charset=utf-8><title>tomato-bazel health</title>'
+            echo '<body style="background:#15161A;color:#ECE7DA;font-family:system-ui;max-width:1000px;margin:2rem auto">'
+            echo '<img src="graph.svg" style="width:100%"><hr>'
+            echo '<pre style="white-space:pre-wrap">'; sed 's/&/\&amp;/g;s/</\&lt;/g' _site/report.md; echo '</pre>'
+          } > _site/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: _site }
+      - id: deploy
+        uses: actions/deploy-pages@v4
