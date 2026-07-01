@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/tomato-bazel/rules_ci",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:tomato-bazel/rules_ci"
+  ],
+  "versions": [
+    "0.0.3"
+  ],
+  "yanked_versions": {}
+}
