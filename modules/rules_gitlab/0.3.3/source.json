@@ -1,0 +1,5 @@
+{
+  "integrity": "sha256-J0KZvsqcfajIBPi8KEY1262g1mhLBtVgmPtIf3/5/XY=",
+  "strip_prefix": "rules_gitlab-0.3.3",
+  "url": "https://github.com/tomato-bazel/rules_gitlab/archive/refs/tags/v0.3.3.tar.gz"
+}
