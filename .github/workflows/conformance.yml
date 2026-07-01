@@ -58,12 +58,16 @@ jobs:
           done
 
       - name: Project to RDF + validate
-        continue-on-error: true   # ADVISORY — flip off to enforce after backfill
+        # --allow-warnings: the docs/examples tier is sh:Warning (won't fail); only the
+        # enforced tier (README/LICENSE/CHANGELOG, sh:Violation) can fail the gate.
+        # `continue-on-error` keeps it ADVISORY while fastverk-side rules are still being
+        # backfilled — drop it to make the enforced tier a hard, cross-org gate.
+        continue-on-error: true
         run: |
           mkdir -p _out
           python3 tools/graph/graph.py --repos-root _repos --out _out --title constellation
-          echo '## SHACL conformance (advisory)' >> "$GITHUB_STEP_SUMMARY"
+          echo '## SHACL conformance' >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          pyshacl -s _repos/rules_tomato/conventions/conventions.shacl.ttl -f human _out/ecosystem.ttl \
+          pyshacl -s _repos/rules_tomato/conventions/conventions.shacl.ttl --allow-warnings -f human _out/ecosystem.ttl \
             | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"

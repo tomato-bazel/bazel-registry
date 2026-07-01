@@ -87,7 +87,8 @@ def write_ttl(data, out):
     t = ['@prefix fv: <https://tomato-bazel.dev/ns#> .', '']
     for mod, info in data.items():
         s = f'fv:{mod.replace("-", "_")}'
-        t.append(f'{s} a fv:Module ; fv:version "{info["version"]}" ;')
+        cls = "fv:Module, fv:RulesModule" if mod.startswith("rules_") else "fv:Module"
+        t.append(f'{s} a {cls} ; fv:version "{info["version"]}" ;')
         for k in CONV:
             t.append(f'    fv:has_{k.strip("/.").replace(".", "")} {str(info["conv"][k]).lower()} ;')
         t[-1] = t[-1][:-1] + " ."
