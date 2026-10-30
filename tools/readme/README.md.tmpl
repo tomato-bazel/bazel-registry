@@ -80,28 +80,28 @@ Run chmod 600 ~/.netrc. Bazel reads this automatically.
 ## Maintenance
 
 Adding a new version or onboarding a new module goes through rels:
-https://github.com/fastverk/bazel-registry/tree/main/tools/rels
+https://github.com/tomato-bazel/bazel-registry/tree/main/tools/rels
 
 ```sh
-cd ~/Workspace/rules_lora
-git tag v0.0.2 -m "rules_lora v0.0.2"
-git push origin v0.0.2
+# After the wrapper's native CI passes, publish its immutable version tag.
+# In the registry checkout, register that public tag through the standard tool:
+bazel run //tools/rels:rels -- release \
+  --repo tomato-bazel/rules_lang --version 0.5.1 --registry-root "$PWD"
+bazel run //:readme.write
+bazel test //... --test_output=errors
 
-cd ~/Workspace/bazel-registry
-GH_TOKEN=$(gh auth token) \
-  tools/rels/target/release/rels release \
-    --repo fastverk/rules_lora \
-    --version 0.0.2 \
-    --registry-root ~/Workspace/bazel-registry
-
-git add modules/rules_lora
-git commit -m "Register rules_lora v0.0.2"
-git push origin main
+git add modules/rules_lang README.md
+git commit -m "Register rules_lang 0.5.1"
+# Open a pull request; merge after required checks pass.
 ```
+
+Public wrapper registration needs no private source token. Keep the engine source
+private, publish compiled Atlas assets separately, and verify the hosted registry
+with an anonymous consumer after the registry change is live.
 
 ## When to use this registry
 
-Use this registry for fastverk-owned modules.
+Use this registry for tomato-bazel public modules and Fastverk modules.
 
 ## Module-table maintenance
 
