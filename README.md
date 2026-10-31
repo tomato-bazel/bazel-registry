@@ -18,7 +18,7 @@ rules in tools/readme/categorization_rules.json.
 |---|---|---|
 | [`rules_agentic_ide`](https://github.com/tomato-bazel/rules_agentic_ide) | 0.0.4 | `tomato-bazel/rules_agentic_ide` |
 | [`rules_lang`](https://github.com/tomato-bazel/rules_lang) | 0.5.1 | `tomato-bazel/rules_lang` |
-| [`rules_lean`](https://github.com/tomato-bazel/rules_lean) | 0.6.2 | `tomato-bazel/rules_lean` |
+| [`rules_lean`](https://github.com/tomato-bazel/rules_lean) | 0.7.0 | `tomato-bazel/rules_lean` |
 | [`rules_spec`](https://github.com/fastverk/rules_spec) | 0.5.1 | `fastverk/rules_spec` |
 
 ### UI and Rendering
