@@ -1,0 +1,5 @@
+{
+  "integrity": "sha256-8d2ZXTGsq0bKIBn2A35hEFH+cK8yW5PNzrQSAW1QypI=",
+  "strip_prefix": "rules_cloudformation-0.10.1",
+  "url": "https://github.com/tomato-bazel/rules_cloudformation/archive/refs/tags/v0.10.1.tar.gz"
+}

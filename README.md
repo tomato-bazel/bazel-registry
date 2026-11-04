@@ -18,7 +18,7 @@ rules in tools/readme/categorization_rules.json.
 |---|---|---|
 | [`rules_agentic_ide`](https://github.com/tomato-bazel/rules_agentic_ide) | 0.0.4 | `tomato-bazel/rules_agentic_ide` |
 | [`rules_lang`](https://github.com/tomato-bazel/rules_lang) | 0.5.2 | `tomato-bazel/rules_lang` |
-| [`rules_lean`](https://github.com/tomato-bazel/rules_lean) | 0.7.1 | `tomato-bazel/rules_lean` |
+| [`rules_lean`](https://github.com/tomato-bazel/rules_lean) | 0.7.2 | `tomato-bazel/rules_lean` |
 | [`rules_spec`](https://github.com/fastverk/rules_spec) | 0.5.1 | `fastverk/rules_spec` |
 
 ### UI and Rendering
@@ -34,13 +34,13 @@ rules in tools/readme/categorization_rules.json.
 
 | Module | Latest | Repository |
 |---|---|---|
-| [`rules_autoconf`](https://github.com/tomato-bazel/rules_autoconf) | 0.1.0 | `tomato-bazel/rules_autoconf` |
-| [`rules_cloudformation`](https://github.com/tomato-bazel/rules_cloudformation) | 0.10.0 | `tomato-bazel/rules_cloudformation` |
+| [`rules_autoconf`](https://github.com/tomato-bazel/rules_autoconf) | 0.1.1 | `tomato-bazel/rules_autoconf` |
+| [`rules_cloudformation`](https://github.com/tomato-bazel/rules_cloudformation) | 0.10.1 | `tomato-bazel/rules_cloudformation` |
 | [`rules_github`](https://github.com/tomato-bazel/rules_github) | 0.1.2 | `tomato-bazel/rules_github` |
 | [`rules_gitlab`](https://github.com/tomato-bazel/rules_gitlab) | 0.3.4 | `tomato-bazel/rules_gitlab` |
 | [`rules_nextjs`](https://github.com/tomato-bazel/rules_nextjs) | 0.3.0 | `tomato-bazel/rules_nextjs` |
 | [`rules_openapi`](https://github.com/tomato-bazel/rules_openapi) | 0.4.0 | `tomato-bazel/rules_openapi` |
-| [`rules_postgres`](https://github.com/tomato-bazel/rules_postgres) | 0.12.0 | `tomato-bazel/rules_postgres` |
+| [`rules_postgres`](https://github.com/tomato-bazel/rules_postgres) | 0.13.0 | `tomato-bazel/rules_postgres` |
 | [`rules_runpod`](https://github.com/fastverk/rules_runpod) | 0.0.11 | `fastverk/rules_runpod` |
 | [`rules_tectonic`](https://github.com/tomato-bazel/rules_tectonic) | 0.2.0 | `tomato-bazel/rules_tectonic` |
 
@@ -96,7 +96,7 @@ rules in tools/readme/categorization_rules.json.
 | [`pgquery`](https://github.com/leangres/pgquery) | 17.6.0 | `leangres/pgquery` |
 | [`pinax`](https://github.com/fastverk/pinax) | 0.1.0 | `fastverk/pinax` |
 | [`rules_aion`](https://gitlab.savvifi.com/aion/rules) | 0.7.3 | `gitlab.savvifi.com/aion/rules` |
-| [`rules_aip`](https://github.com/tomato-bazel/rules_aip) | 0.3.0 | `tomato-bazel/rules_aip` |
+| [`rules_aip`](https://github.com/tomato-bazel/rules_aip) | 0.3.1 | `tomato-bazel/rules_aip` |
 | [`rules_astro`](https://github.com/tomato-bazel/rules_astro) | 0.0.1 | `tomato-bazel/rules_astro` |
 | [`rules_brand`](https://github.com/mattmarshall/rules_brand) | 0.1.1 | `mattmarshall/rules_brand` |
 | [`rules_cc_host`](https://github.com/tomato-bazel/rules_cc_host) | 0.1.0 | `tomato-bazel/rules_cc_host` |
@@ -111,7 +111,7 @@ rules in tools/readme/categorization_rules.json.
 | [`rules_macvm`](https://github.com/tomato-bazel/rules_macvm) | 0.0.1 | `tomato-bazel/rules_macvm` |
 | [`rules_markdown`](https://github.com/tomato-bazel/rules_markdown) | 0.0.3 | `tomato-bazel/rules_markdown` |
 | [`rules_podman`](https://github.com/tomato-bazel/rules_podman) | 0.0.2 | `tomato-bazel/rules_podman` |
-| [`rules_readme`](https://github.com/tomato-bazel/rules_readme) | 0.0.3 | `tomato-bazel/rules_readme` |
+| [`rules_readme`](https://github.com/tomato-bazel/rules_readme) | 0.0.4 | `tomato-bazel/rules_readme` |
 | [`rules_systemd`](https://github.com/tomato-bazel/rules_systemd) | 0.0.1 | `tomato-bazel/rules_systemd` |
 | [`rules_tap`](https://github.com/tomato-bazel/rules_tap) | 0.0.3 | `tomato-bazel/rules_tap` |
 | [`rules_tla`](https://github.com/tomato-bazel/rules_tla) | 0.2.0 | `tomato-bazel/rules_tla` |

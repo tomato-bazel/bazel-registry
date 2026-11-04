@@ -1,0 +1,5 @@
+{
+  "integrity": "sha256-mV3fBfRxeKH4XvDW+CVWVZIfXxkpRKXahbSGyavTqKY=",
+  "strip_prefix": "rules_aip-0.3.1",
+  "url": "https://github.com/tomato-bazel/rules_aip/archive/refs/tags/v0.3.1.tar.gz"
+}
