@@ -10,7 +10,8 @@
     "github:tomato-bazel/rules_autoconf"
   ],
   "versions": [
-    "0.1.0"
+    "0.1.0",
+    "0.1.1"
   ],
   "yanked_versions": {}
 }

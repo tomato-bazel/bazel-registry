@@ -1,0 +1,5 @@
+{
+  "integrity": "sha256-66O1Hi9xhJtOOIrG3pZVlsamkM+6slNOrYHISNzfKMg=",
+  "strip_prefix": "rules_autoconf-0.1.1",
+  "url": "https://github.com/tomato-bazel/rules_autoconf/archive/refs/tags/v0.1.1.tar.gz"
+}
