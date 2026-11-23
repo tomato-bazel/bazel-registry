@@ -1,5 +1,0 @@
-{
-  "integrity": "sha256-wCgQ+Lcw1iKQhlubOqz75a6uCtLtbBRGSSljOz8s24U=",
-  "strip_prefix": "rules_aws_workflows-0.2.1",
-  "url": "https://github.com/tomato-bazel/rules_aws_workflows/archive/refs/tags/v0.2.1.tar.gz"
-}

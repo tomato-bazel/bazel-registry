@@ -13,7 +13,7 @@
 #     to a specific `cloudformation_stack` target.
 module(
     name = "rules_aws_workflows",
-    version = "0.2.1",
+    version = "0.2.2",
 )
 
 bazel_dep(name = "platforms", version = "1.0.0")
@@ -24,14 +24,24 @@ bazel_dep(name = "rules_shell", version = "0.6.1")
 # workflow tools in this repo.
 bazel_dep(name = "rules_rust", version = "0.70.0")
 
-rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+# The pinned toolchain is dev-only: a non-dev register_toolchains would
+# propagate to every transitive consumer (tomato-bazel gate D2). Consumers
+# resolve their own Rust toolchain, or rules_rust's default registration.
+rust = use_extension(
+    "@rules_rust//rust:extensions.bzl",
+    "rust",
+    dev_dependency = True,
+)
 rust.toolchain(
     edition = "2021",
     versions = ["1.95.0"],
 )
 use_repo(rust, "rust_toolchains")
 
-register_toolchains("@rust_toolchains//:all")
+register_toolchains(
+    "@rust_toolchains//:all",
+    dev_dependency = True,
+)
 
 # Root builds need a hermetic C/C++ toolchain when the build plane disables
 # host compiler autodetection. Keep this toolchain local to development builds.
@@ -64,12 +74,16 @@ crate = use_extension(
 # when this module is a dependency rather than the root, so a pinned
 # cargo-bazel-lock.json fails every downstream consumer with "Digests do not
 # match". Crate versions stay pinned by Cargo.lock.
+#
+# The generated repo name is namespaced (tomato-bazel gate D3): names chosen on
+# a shared extension must carry the module prefix. It is mapped back to the
+# apparent name `@crates`, so BUILD labels are unchanged.
 crate.from_cargo(
-    name = "crates",
+    name = "aws_workflows_crates",
     cargo_lockfile = "//cfn_console:Cargo.lock",
     manifests = ["//cfn_console:Cargo.toml"],
 )
-use_repo(crate, "crates")
+use_repo(crate, crates = "aws_workflows_crates")
 
 # meridian — proto-driven UI framework. cfn_console builds a
 # PromptPanel for CFN Parameters + a confirmation panel for the

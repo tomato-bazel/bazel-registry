@@ -35,7 +35,7 @@ rules in tools/readme/categorization_rules.json.
 | Module | Latest | Repository |
 |---|---|---|
 | [`rules_autoconf`](https://github.com/tomato-bazel/rules_autoconf) | 0.1.1 | `tomato-bazel/rules_autoconf` |
-| [`rules_aws_workflows`](https://github.com/tomato-bazel/rules_aws_workflows) | 0.2.1 | `tomato-bazel/rules_aws_workflows` |
+| [`rules_aws_workflows`](https://github.com/tomato-bazel/rules_aws_workflows) | 0.2.2 | `tomato-bazel/rules_aws_workflows` |
 | [`rules_cloudformation`](https://github.com/tomato-bazel/rules_cloudformation) | 0.10.1 | `tomato-bazel/rules_cloudformation` |
 | [`rules_github`](https://github.com/tomato-bazel/rules_github) | 0.1.2 | `tomato-bazel/rules_github` |
 | [`rules_gitlab`](https://github.com/tomato-bazel/rules_gitlab) | 0.3.4 | `tomato-bazel/rules_gitlab` |
