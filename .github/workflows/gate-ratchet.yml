@@ -47,21 +47,27 @@ env:
   #
   # Bump in its OWN PR whenever the gate diff touches crates/**, gates/*.rq,
   # gates/declarations.ttl or vendor/bcr/** — those are the only four things that
-  # can move a count. The previous bump (3c17305..7d06b7b) touched none of them
-  # and rode along with a workflow change; this one touches two, so it rides
+  # can move a count. This bump (0c07789..b44fd90) touches all four, so it rides
   # alone.
   #
-  # 0c07789 is gate PR #4. The change that moves a number: D3 never read
-  # gate:extDev, so it flagged repo names on dev_dependency extension usages —
-  # usages dropped from every module graph but the module's own, whose repos are
-  # therefore in no consumer's graph and cannot collide with anything. 8 of 38
-  # findings were never real. D3 38 -> 30.
+  # b44fd90 is gate PR #9, on top of #5 (projection refresh) and #6 (S7). Measured
+  # on registry main 4040d70, old gate vs new:
+  #
+  #   * D2 49 -> 46. #9 adds a SCOPED declaration for rules_lora's three backend
+  #     toolchains (@rules_lora//lora/backend:{local,modal,runpod}_toolchain),
+  #     which `lora_train` resolves by design. Its non-dev @rust_toolchains//:all
+  #     stays a finding; rules_lora 0.1.5 makes that registration dev-only.
+  #   * C1 29 -> 30. helly25_bzl now resolves at both 0.3.1 and 0.4.3. The split
+  #     was already in the registry. The old vendored snapshot simply lacked the
+  #     0.4.3 MODULE.bazel (vendored in #6, with metadata fixed in #9's snapshot
+  #     refresh), so MVS could not see it. A real finding, newly visible.
+  #   * S7 is new, at 0 findings.
   #
   # THE RATCHET CANNOT SHOW YOU THIS. Both base and head are projected by the
   # same ref, so a query change shifts both sides equally and never registers as
   # a regression. That is the argument for a dedicated PR, not against needing
   # one: this is the only place a gate change is ever visible.
-  GATE_REF: 0c0778949b3f88dfe94e87de664092bb177ef067
+  GATE_REF: b44fd901908e05cccd50d71fb6b5d43681ddb3d4
 
 jobs:
   ratchet:
