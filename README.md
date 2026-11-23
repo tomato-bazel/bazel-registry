@@ -42,7 +42,7 @@ rules in tools/readme/categorization_rules.json.
 | [`rules_nextjs`](https://github.com/tomato-bazel/rules_nextjs) | 0.3.0 | `tomato-bazel/rules_nextjs` |
 | [`rules_openapi`](https://github.com/tomato-bazel/rules_openapi) | 0.4.0 | `tomato-bazel/rules_openapi` |
 | [`rules_postgres`](https://github.com/tomato-bazel/rules_postgres) | 0.13.0 | `tomato-bazel/rules_postgres` |
-| [`rules_runpod`](https://github.com/tomato-bazel/rules_runpod) | 0.1.0 | `tomato-bazel/rules_runpod` |
+| [`rules_runpod`](https://github.com/tomato-bazel/rules_runpod) | 0.1.1 | `tomato-bazel/rules_runpod` |
 | [`rules_tectonic`](https://github.com/tomato-bazel/rules_tectonic) | 0.2.0 | `tomato-bazel/rules_tectonic` |
 
 ### Data and Knowledge
