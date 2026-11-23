@@ -1,0 +1,16 @@
+{
+  "homepage": "https://github.com/tomato-bazel/rules_aws_workflows",
+  "maintainers": [
+    {
+      "name": "Matt Marshall",
+      "github": "mattmarshall"
+    }
+  ],
+  "repository": [
+    "github:tomato-bazel/rules_aws_workflows"
+  ],
+  "versions": [
+    "0.2.2"
+  ],
+  "yanked_versions": {}
+}

@@ -1,0 +1,31 @@
+"""rules_walkthrough — Bazel-native slide-deck framework.
+
+Renders declarative `walkthrough.v1.Walkthrough` JSON documents to a
+self-contained static site (renderer JS + KaTeX + marked + Vega-Lite +
+per-deck data sidecars).
+"""
+
+module(
+    name = "rules_walkthrough",
+    version = "0.2.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+bazel_dep(name = "rules_python", version = "0.36.0")
+
+# Bazel 9 dropped native sh_test/sh_binary; the renderer dir's
+# filegroup needs nothing exotic, but consumer-side macros that
+# extend us may.
+bazel_dep(name = "rules_shell", version = "0.4.1")
+
+# The data-source resolver lazy-imports numpy/pyarrow so this module
+# doesn't carry a pip toolchain. Consumers that pass .npy/.npz/.parquet
+# via `data =` are responsible for ensuring those libraries are in the
+# resolver's runfiles (for example by adding them to their own pip hub
+# and wrapping the rule). JSON and CSV data sources work out of the
+# box; the numpy/pyarrow paths raise a clear error if their dep is
+# missing.
+
+# Dev-only: API docs (//docs) and the docs-freshness / example build tests.
+bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
