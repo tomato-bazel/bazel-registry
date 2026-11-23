@@ -25,6 +25,7 @@
   },
   "Cloud and Infrastructure": {
     "exact": [
+      "rules_aws_workflows",
       "rules_autoconf",
       "rules_cloudformation",
       "rules_github",

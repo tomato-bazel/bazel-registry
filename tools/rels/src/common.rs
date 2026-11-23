@@ -78,7 +78,6 @@ impl Env {
             "rules_spec" => names.push("spec".to_string()),
             "rules_ci_ir" => names.push("rules_ci".to_string()),
             "rules_lang" => names.push("polyglot".to_string()),
-            "rules_walkthrough" => names.push("preso".to_string()),
             _ => {}
         }
         names
@@ -89,11 +88,6 @@ impl Env {
     pub fn checkout_path_candidates(&self, module_name: &str) -> Vec<PathBuf> {
         let mut candidates = Vec::new();
         match module_name {
-            // rules_walkthrough is being moved to mattmarshall/preso.
-            "rules_walkthrough" => {
-                candidates.push(self.workspaces_root.join("mattmarshall").join("preso"));
-                candidates.push(self.workspaces_root.join("mattmarshall").join("repos").join("preso"));
-            }
             // rules_lang is locally overridden to savvi/aion/polyglot.
             "rules_lang" => {
                 candidates.push(self.workspaces_root.join("savvi").join("aion").join("polyglot"));
